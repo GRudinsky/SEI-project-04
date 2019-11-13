@@ -1,7 +1,16 @@
 console.log('Hello')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import Home from './components/Home'
 
-fetch('/api/proxyflights')
-  .then(res => res.json())
+const App = () => (
+  <BrowserRouter>
+    <Route exact path="/" component={Home} />
+  </BrowserRouter>
+)
 
-  .then(res => console.log('response', res))
-  .catch(err => console.log(err))
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+)
