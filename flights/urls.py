@@ -3,7 +3,7 @@ from .views import ListView
 # from . import views
 
 urlpatterns = [
-    path('proxyflights', ListView.as_view())
+    path('proxyflights/', ListView.as_view())
 ]
 
 # urlpatterns = [

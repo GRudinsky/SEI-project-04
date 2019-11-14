@@ -6,15 +6,14 @@ import requests
 
 class ListView(APIView):
 
-    def get(self, request):
-    #    to make your request to the external api
-        # request.data
-        # params = {
-        #     title: req
-        #     fly_from: VNO
-        #     url: 'https://api.skypicker.com/flights?fly_from=VNO&fly_to=JP&dateFrom=18/11/2019&dateTo=19/11/2019&partner=picky'
-        # }
-        url = 'https://api.skypicker.com/flights?fly_from=VNO&fly_to=JP&dateFrom=18/11/2019&dateTo=19/11/2019&partner=picky'
+    def post(self, request):
+        data = request.data
+        origin = data.pop('origin')
+        destination = data.pop('destination')
+        departure_date = data.pop('departureDate')
+        return_date = data.pop('returnDate')
+        print(origin, destination, departure_date, return_date)
+        url = f'https://api.skypicker.com/flights?fly_from={origin}&fly_to={destination}&dateFrom={departure_date}&dateTo={return_date}&partner=picky'
         r = requests.get(url)
         data = r.json()
         return Response(data, status=status.HTTP_200_OK)

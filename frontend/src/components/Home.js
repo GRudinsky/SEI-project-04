@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 
 import Calendar from './Calendar'
+import ResultsCard from './ResultsCard'
 import '@lls/react-light-calendar/dist/index.css'
 
 class Home extends React.Component {
@@ -15,6 +16,7 @@ class Home extends React.Component {
       returnCalendarActive: false,
       startDate: null,
       endDate: null,
+      returnDateLimit: null,
       dateFrom: null,
       dateTo: null
     }
@@ -29,12 +31,17 @@ class Home extends React.Component {
     console.log(this.state.searchData)
     this.setState({ searchData })
   }
- 
+  getSearchString() {
+
+    // https://api.skypicker.com/flights?fly_from=VNO&fly_to=JP&dateFrom=18/11/2019&dateTo=19/11/2019&partner=picky
+    return `flights?fly_from=${this.state.searchData.origin}&fly_to=${this.state.searchData.destination}&dateFrom=${this.state.searchData.departureDate}&dateTo=${this.state.searchData.returnDate}&partner=picky`
+  }
+
   handleSubmit(e) {
-    e.prevetDefault()
-    console.log(e.target.value)
-    axios.get('/api/proxyflights')
-      .then(res => this.setState({ flightResults: res.json() }))
+    // e.prevetDefault()
+    // console.log('submitting search')
+    axios.post('/api/proxyflights/', this.state.searchData)
+      .then(res => this.setState({ flightResults: res.data }))
       .catch(err => console.log('errors', err))
   }
   getDate(value) {
@@ -44,33 +51,35 @@ class Home extends React.Component {
   handleDateChange(startDate, endDate) {
     const dateFrom = this.getDate(startDate)
     const dateTo = this.getDate(endDate)
-    this.setState({ startDate, endDate, dateFrom, dateTo })
+    this.setState({ startDate, endDate, dateFrom, dateTo }, () => {
+      // this.state.departureCalendarActive ? this.setState({ ... }) : this.setState({ searchData.returnDate: dateFrom })
+      if (this.state.departureCalendarActive) {
+        this.setState({ returnDateLimit: startDate, searchData: { ...this.state.searchData, departureDate: dateFrom } })
+      } else {
+        this.setState({ searchData: { ...this.state.searchData, returnDate: dateFrom } })
+      }
+    })
+    
   }
   toggleCalendar(e) {
-    e.target.name === 'departureDate' ? this.setState({ departureCalendarActive: true, returnCalendarActive: false }) : this.setState({ departureCalendarActive: false, returnCalendarActive: true })
+    e.target.name === 'departureDate' ? this.setState({ departureCalendarActive: true, returnCalendarActive: false }) : (e.target.name === 'returnDate' ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false }) )
   }
 
   render() {
-
-    // fetch('/api/proxyflights')
-    //   .then(res => res.json())
-    //   .then(res => console.log('response', res))
-    //   .catch(err => console.log(err))
-
-  
-    const { searchData } = this.state
-    const { handleChange, toggleCalendar } = this
+    const { searchData, startDate, endDate, departureCalendarActive, returnCalendarActive } = this.state
+    const { handleChange, toggleCalendar, handleDateChange } = this
 
     console.log('state', this.state)
     return (
       <section className="container">
         <form
-          value='form'
+          value="form"
           onSubmit={this.handleSubmit}
+          onFocus={toggleCalendar}
         >
-          <div className="field is-horizontal">
-            <div className="field-body">
-              <div className="field">
+          <div className="search-bar">
+            <div className="row">
+              <div className="three columns">
                 {/* <label className="label">From</label> */}
                 <div className="control">
                   <input 
@@ -83,7 +92,7 @@ class Home extends React.Component {
                   />
                 </div>
               </div>
-              <div className="field">
+              <div className="three columns">
                 <div className="control">
                   <input 
                     className="input" 
@@ -95,25 +104,29 @@ class Home extends React.Component {
                   />
                 </div>
               </div>
-              <div className="field">
+              <div className="three columns">
                 <div className="control">
                   <input 
                     className="input" 
                     type="text" 
                     name="departureDate"
                     placeholder="Departure"
-                    // value={searchData.departureDate}
-                    value={this.state.dateFrom}
-                    onClick={toggleCalendar}
-                    onChange={handleChange} />
+                    value={searchData.departureDate}
+                    // value={this.state.departureCalendarActive && this.state.dateFrom}
+                    onChange={handleChange}
+                    onFocus={toggleCalendar}
+                  />
                 </div>
                 {this.state.departureCalendarActive &&
                   <Calendar
-                    handleChange={this.handleDateChange}
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate} />}
+                    handleChange={handleDateChange}
+                    startDate={startDate}
+                    endDate={endDate}
+                    departureCalendarActive={departureCalendarActive} 
+                    returnCalendarActive={returnCalendarActive}
+                  />}
               </div>
-              <div className="field">
+              <div className="two columns">
                 <div className="control">
                   <input 
                     className="input" 
@@ -121,23 +134,39 @@ class Home extends React.Component {
                     name="returnDate"
                     placeholder="Return" 
                     value={searchData.returnDate}
+                    // value={this.state.returnCalendarActive && this.state.dateFrom}
                     onChange={handleChange}
-                    onClick={toggleCalendar}
+                    onFocus={toggleCalendar}
                     // disabled
                   />
                   {this.state.returnCalendarActive &&
                     <Calendar
                       handleChange={this.handleDateChange}
                       startDate={this.state.startDate}
-                      endDate={this.state.endDate} />}
+                      endDate={this.state.endDate} 
+                      departureCalendarActive={departureCalendarActive}
+                      returnCalendarActive={returnCalendarActive}
+                      disableDates={date => date < this.state.returnDateLimit}
+                    />}
                 </div>
               </div>
-              <div className="control">
-                <div className="button is-info">Submit</div>
+              <div 
+                className="button is-info"
+                onClick={this.handleSubmit}>
+                Submit
               </div>
             </div>
           </div>
         </form>
+        {this.state.flightResults && this.state.flightResults.data.map(flight => (
+          <ResultsCard key={flight.id}
+            {...flight}/>
+
+          // <div key={flight.id}>
+          //   <p>{flight.flyFrom}</p>
+          //   <p>{flight.flyTo}</p>
+          // </div>
+        ))}
       </section>
     )
   }
