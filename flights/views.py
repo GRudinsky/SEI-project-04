@@ -1,7 +1,11 @@
+#pylint: disable=no-member
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from .models import Search
+from .serializers import SearchSerializer
 import requests
 
 class ListView(APIView):
@@ -17,3 +21,13 @@ class ListView(APIView):
         r = requests.get(url)
         data = r.json()
         return Response(data, status=status.HTTP_200_OK)
+
+class SearchListView(ListCreateAPIView):
+    # permission_classes=(IsAuthenticatedOrReadOnly, )
+    queryset = Search.objects.all()
+    serializer_class = SearchSerializer
+
+class SearchDetailView(RetrieveUpdateDestroyAPIView):
+    # permission_classes=(IsAuthenticatedOrReadOnly, )
+    queryset = Search.objects.all()
+    serializer_class = SearchSerializer

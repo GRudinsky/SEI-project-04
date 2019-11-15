@@ -8,7 +8,7 @@ const getDate = (value) => {
 
 const getTime = (value) => {
   const time = new Date(value * 1000)
-  return `${time.getHours()}:${time.getMinutes()}`
+  return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
 const ResultsCard = ( { ...flight } ) => (

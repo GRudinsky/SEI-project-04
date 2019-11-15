@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-
 import Calendar from './Calendar'
 import ResultsCard from './ResultsCard'
 import '@lls/react-light-calendar/dist/index.css'
@@ -41,6 +40,7 @@ class Home extends React.Component {
         ]
       },
       searchData: {
+        user: 'undefined'
       },
       departureCalendarActive: false,
       returnCalendarActive: false,
@@ -69,9 +69,13 @@ class Home extends React.Component {
 
   handleSubmit(e) {
     // e.prevetDefault()
-    // console.log('submitting search')
     axios.post('/api/proxyflights/', this.state.searchData)
-      .then(res => this.setState({ flightResults: res.data }))
+      .then(res => this.setState({ flightResults: res.data }), this.pushSearchtoDB())
+      .catch(err => console.log('errors', err))
+  }
+  pushSearchtoDB(){
+    axios.post('/api/searches', this.state.searchData)
+      .then(res => console.log(res))
       .catch(err => console.log('errors', err))
   }
   getDate(value) {
@@ -86,7 +90,6 @@ class Home extends React.Component {
     const dateFrom = this.getDate(startDate)
     const dateTo = this.getDate(endDate)
     this.setState({ startDate, endDate, dateFrom, dateTo }, () => {
-      // this.state.departureCalendarActive ? this.setState({ ... }) : this.setState({ searchData.returnDate: dateFrom })
       if (this.state.departureCalendarActive) {
         this.setState({ returnDateLimit: startDate, searchData: { ...this.state.searchData, departureDate: dateFrom } })
       } else {
@@ -97,6 +100,11 @@ class Home extends React.Component {
   }
   toggleCalendar(e) {
     e.target.name === 'departureDate' ? this.setState({ departureCalendarActive: true, returnCalendarActive: false }) : (e.target.name === 'returnDate' ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false }) )
+  }
+  componentDidMount() {
+    axios.get('api/searches')
+      .then(res => this.setState({ searches: res.data }))
+      .catch(err => console.log(err))
   }
 
   render() {
@@ -114,7 +122,6 @@ class Home extends React.Component {
           <div className="search-bar">
             <div className="row">
               <div className="three columns">
-                {/* <label className="label">From</label> */}
                 <div className="control">
                   <input 
                     className="input" 
@@ -158,6 +165,7 @@ class Home extends React.Component {
                     endDate={endDate}
                     departureCalendarActive={departureCalendarActive} 
                     returnCalendarActive={returnCalendarActive}
+                    disableDates={date => date < new Date() - 86400000}
                   />}
               </div>
               <div className="two columns">
@@ -193,7 +201,7 @@ class Home extends React.Component {
           </div>
         </form>
         <div className="flex-column">
-          <ResultsCard
+          {/* <ResultsCard
             flyFrom = {fakeFlighData.flyFrom}
             flyTo={fakeFlighData.flyTo}
             price={fakeFlighData.price}
@@ -204,17 +212,21 @@ class Home extends React.Component {
             dTime={fakeFlighData.dTime}
             aTime={fakeFlighData.aTime}
             pnr_count={fakeFlighData.pnr_count}
-          />
+          /> */}
           {this.state.flightResults && this.state.flightResults.data.map(flight => (
             <ResultsCard key={flight.id}
               {...flight}
               currency = {this.state.flightResults.currency}/>
           ))}
         </div>
+        <div className="flex-row">
+          {this.state.searches && (
+            <p>{this.state.searches.length} searches and counting</p>
+          )}
+        </div>
       </section>
     )
   }
-
 }
 export default Home
 
