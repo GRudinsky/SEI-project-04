@@ -10,6 +10,36 @@ class Home extends React.Component {
     super()
     this.state = {
       flightResults: null,
+      fakeFlighData: {
+        flyFrom: 'VNO',
+        flyTo: 'NGO',
+        cityFrom: 'Vilnius',
+        cityTo: 'Nagoya',
+        price: 344,
+        fly_duration: '21h 0m',
+        dTime: 1574157600,
+        dTimeUTC: 1574150400,
+        aTime: 1574258400,
+        aTimeUTC: 1574226000,
+        pnr_count: 2,
+        route: [
+          { flyFrom: 'VNO',
+            flyTo: 'HEL',
+            cityTo: 'Helsinki',
+            cityFrom: 'Vilnius' },
+          { 
+            flyFrom: 'HEL',
+            flyTo: 'PVG', 
+            cityTo: 'Shanghai',
+            cityFrom: 'Helsinki'  },
+          {
+            flyFrom: 'PVG',
+            flyTo: 'NGO',
+            cityTo: 'Nagoya',
+            cityFrom: 'Shanghai'
+          }
+        ]
+      },
       searchData: {
       },
       departureCalendarActive: false,
@@ -48,6 +78,10 @@ class Home extends React.Component {
     const time = new Date(value)
     return `${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`
   }
+  getTime(value) {
+    const time = new Date(value)
+    return `${time.getHours()}:${time.getMinutes()}`
+  }
   handleDateChange(startDate, endDate) {
     const dateFrom = this.getDate(startDate)
     const dateTo = this.getDate(endDate)
@@ -66,7 +100,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { searchData, startDate, endDate, departureCalendarActive, returnCalendarActive } = this.state
+    const { searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, fakeFlighData } = this.state
     const { handleChange, toggleCalendar, handleDateChange } = this
 
     console.log('state', this.state)
@@ -158,15 +192,25 @@ class Home extends React.Component {
             </div>
           </div>
         </form>
-        {this.state.flightResults && this.state.flightResults.data.map(flight => (
-          <ResultsCard key={flight.id}
-            {...flight}/>
-
-          // <div key={flight.id}>
-          //   <p>{flight.flyFrom}</p>
-          //   <p>{flight.flyTo}</p>
-          // </div>
-        ))}
+        <div className="flex-column">
+          <ResultsCard
+            flyFrom = {fakeFlighData.flyFrom}
+            flyTo={fakeFlighData.flyTo}
+            price={fakeFlighData.price}
+            fly_duration={fakeFlighData.fly_duration}
+            cityFrom={fakeFlighData.cityFrom}
+            cityTo={fakeFlighData.cityTo}
+            route={fakeFlighData.route}
+            dTime={fakeFlighData.dTime}
+            aTime={fakeFlighData.aTime}
+            pnr_count={fakeFlighData.pnr_count}
+          />
+          {this.state.flightResults && this.state.flightResults.data.map(flight => (
+            <ResultsCard key={flight.id}
+              {...flight}
+              currency = {this.state.flightResults.currency}/>
+          ))}
+        </div>
       </section>
     )
   }

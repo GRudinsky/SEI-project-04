@@ -1,12 +1,74 @@
 
+$base-borders: #808174;
+
+.small-text {
+  font-size: 12px;
+}
+h1 {
+  margin-bottom: 10px;
+}
+.base-color {
+  color: $base-borders;
+}
 body {
   margin-top: 5vh;
 }
-// .columns {
-//   max-width: 25vw;
-// }
 
 // calendar styles
 .absolute {
   position: absolute;
+}
+//flexbox
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.flex-row {
+  display: flex;
+  justify-content: center;
+}
+
+// card 
+
+.card {
+border: 1px solid $base-borders;
+border-radius: 3px;
+margin: 1vh 0 1vh 0;
+}
+
+// width
+.auto-wide {
+  max-width: auto;
+}
+.thirty-wide {
+  width: 30vw;
+}
+.fifty-wide {
+  width: 50vw;
+}
+.twenty-percent-wide {
+  width: 20%;
+}
+.thirty-percent-wide {
+  width: 30%;
+}
+.fifty-percent-wide {
+  width: 50%;
+}
+.sixty-percent-wide {
+  width: 60%;
+}
+.seventy-percent-wide {
+  width: 70%;
+}
+
+// height
+
+.ten-high {
+  height: 10vh;
+}
+.twenty-high {
+  height: 20vh;
 }
