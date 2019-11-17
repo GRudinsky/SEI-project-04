@@ -11,33 +11,28 @@ const getTime = (value) => {
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-const ResultsCard = ( { ...flight } ) => (
-  <div className="card flex-row fifty-wide twenty-high" key={flight.id}>
-    <div className="flex-column twenty-percent-wide">
-      <span className="small-text">Transfers:{flight.route.length - 1}</span>
+const ResultsCard = ( { ...flight }, { currency } ) => (
+  <div className="card with-shadow flex-row centered half-screen-wide quarter-screen-high" key={flight.id}>
+    <div className="flex-column centered quarter-parent-wide">
+      <span className="small-text">Layovers:{flight.route.length - 1}</span>
       {flight.route && flight.route.map(fly => (
-        <div className="small-text base-color" key={flight.route.indexOf(fly)}>
-          {fly.flyFrom}⇢{fly.flyTo}
+        <div className="small-text base-color flex-row space-around full-parent-wide " key={flight.route.indexOf(fly)}>
+          <div className="left-margin">{fly.flyFrom}⇢{fly.flyTo}</div>  
+          <div><img src={`https://images.kiwi.com/airlines/16x16/${fly.airline}.png`} />
+          </div>
         </div>
       ))}
     </div>
-    <div className="flex-row fifty-percent-wide">
-      <div>
-        <p className="small-text base-color"></p>
-      </div>
-      <div className="flex-column">
-        <h5><span className="small-text base-color">{flight.cityFrom}</span>{flight.flyFrom} ⇢ {flight.flyTo}<span className="small-text base-color">{flight.cityTo}</span></h5>
-        <p className="small-text base-color">{getDate(flight.dTime)} {getTime(flight.dTime)}  ⇢ {flight.fly_duration} ⇢ {getDate(flight.aTime)} {getTime(flight.aTime)} </p>
-      </div>
-      <div>
-        <p className="small-text base-color"></p>
-      </div>
+   
+    <div className="flex-column centered half-parent-wide">
+      <h5><span className="small-text base-color">{flight.cityFrom}</span>{flight.flyFrom} <img src="https://image.flaticon.com/icons/png/16/61/61212.png"/> {flight.flyTo}<span className="small-text base-color">{flight.cityTo}</span></h5>
+      <p className="small-text base-color">{getDate(flight.dTime)} {getTime(flight.dTime)}  ⇢ {flight.fly_duration} ⇢ {getDate(flight.aTime)} {getTime(flight.aTime)} </p>
     </div>
-    <div className="flex-column thirty-percent-wide">
+    <div className="flex-column centered quarter-parent-wide">
       <div>
-        <h1>{flight.price}<span>{}</span></h1>
+        <h2>{flight.price}<span className="small-text base-color">{flight.conversion && Object.keys(flight.conversion)[0]}</span></h2>
       </div>
-      <div className="button button-primary">
+      <div className="button">
         Book
       </div>
     </div>

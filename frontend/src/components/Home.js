@@ -1,7 +1,9 @@
 import React from 'react'
 import axios from 'axios'
-import Calendar from './Calendar'
+import RegionalSettings from './RegionalSettings'
+import FlightSearchBar from './FlightSearchBar'
 import ResultsCard from './ResultsCard'
+import Map from './Map'
 import '@lls/react-light-calendar/dist/index.css'
 
 class Home extends React.Component {
@@ -22,25 +24,45 @@ class Home extends React.Component {
         aTimeUTC: 1574226000,
         pnr_count: 2,
         route: [
-          { flyFrom: 'VNO',
+          {
+            id: '0c880ddc472b0000c919984d_0',
+            flyFrom: 'VNO',
             flyTo: 'HEL',
+            airline: 'AY',
             cityTo: 'Helsinki',
-            cityFrom: 'Vilnius' },
+            cityFrom: 'Vilnius',
+            latFrom: 54.634167,
+            lngFrom: 25.285833,
+            latTo: 52.165833,
+            lngTo: 20.967222 },
           { 
+            id: '0c880ddc472b0000c919984d_1',
             flyFrom: 'HEL',
             flyTo: 'PVG', 
+            airline: 'HO',
             cityTo: 'Shanghai',
-            cityFrom: 'Helsinki'  },
+            cityFrom: 'Helsinki',
+            latFrom: 52.165833,
+            lngFrom: 20.967222,
+            latTo: 40.08,
+            lngTo: 116.584444  },
           {
+            id: '0ddc14a2472c0000ec715d27_0',
             flyFrom: 'PVG',
             flyTo: 'NGO',
             cityTo: 'Nagoya',
-            cityFrom: 'Shanghai'
+            airline: 'HO',
+            cityFrom: 'Shanghai',
+            latFrom: 40.08,
+            lngFrom: 116.584444,
+            latTo: 38.965556,
+            lngTo: 121.538611
           }
         ]
       },
       searchData: {
-        user: 'undefined'
+        user: 'undefined',
+        currency: 'EUR'
       },
       departureCalendarActive: false,
       returnCalendarActive: false,
@@ -54,17 +76,14 @@ class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleCalendar = this.toggleCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
+    this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
   }
   //form functions
   handleChange(e) {
     const searchData = { ...this.state.searchData, [e.target.name]: e.target.value }
+    console.log(e.target.name)
     console.log(this.state.searchData)
     this.setState({ searchData })
-  }
-  getSearchString() {
-
-    // https://api.skypicker.com/flights?fly_from=VNO&fly_to=JP&dateFrom=18/11/2019&dateTo=19/11/2019&partner=picky
-    return `flights?fly_from=${this.state.searchData.origin}&fly_to=${this.state.searchData.destination}&dateFrom=${this.state.searchData.departureDate}&dateTo=${this.state.searchData.returnDate}&partner=picky`
   }
 
   handleSubmit(e) {
@@ -96,11 +115,16 @@ class Home extends React.Component {
         this.setState({ searchData: { ...this.state.searchData, returnDate: dateFrom } })
       }
     })
-    
   }
   toggleCalendar(e) {
     e.target.name === 'departureDate' ? this.setState({ departureCalendarActive: true, returnCalendarActive: false }) : (e.target.name === 'returnDate' ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false }) )
   }
+  // Map functions
+  toggleMapDropDown(e) {
+    console.log(e.target.id)
+    this.state.flightOnMap !== e.target.id ? this.setState({ flightOnMap: e.target.id }) : this.setState({ flightOnMap: '' })
+  }
+
   componentDidMount() {
     axios.get('api/searches')
       .then(res => this.setState({ searches: res.data }))
@@ -108,100 +132,22 @@ class Home extends React.Component {
   }
 
   render() {
-    const { searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, fakeFlighData } = this.state
-    const { handleChange, toggleCalendar, handleDateChange } = this
+    const { searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap } = this.state
+    const { handleChange, handleDateChange, handleSubmit, toggleCalendar, toggleMapDropDown } = this
 
     console.log('state', this.state)
     return (
-      <section className="container">
-        <form
-          value="form"
-          onSubmit={this.handleSubmit}
-          onFocus={toggleCalendar}
-        >
-          <div className="search-bar">
-            <div className="row">
-              <div className="three columns">
-                <div className="control">
-                  <input 
-                    className="input" 
-                    type="text"
-                    name="origin"
-                    placeholder="From"
-                    value={searchData.origin}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <div className="three columns">
-                <div className="control">
-                  <input 
-                    className="input" 
-                    type="text" 
-                    name="destination"
-                    placeholder="To" 
-                    value={searchData.destination}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <div className="three columns">
-                <div className="control">
-                  <input 
-                    className="input" 
-                    type="text" 
-                    name="departureDate"
-                    placeholder="Departure"
-                    value={searchData.departureDate}
-                    // value={this.state.departureCalendarActive && this.state.dateFrom}
-                    onChange={handleChange}
-                    onFocus={toggleCalendar}
-                  />
-                </div>
-                {this.state.departureCalendarActive &&
-                  <Calendar
-                    handleChange={handleDateChange}
-                    startDate={startDate}
-                    endDate={endDate}
-                    departureCalendarActive={departureCalendarActive} 
-                    returnCalendarActive={returnCalendarActive}
-                    disableDates={date => date < new Date() - 86400000}
-                  />}
-              </div>
-              <div className="two columns">
-                <div className="control">
-                  <input 
-                    className="input" 
-                    type="text" 
-                    name="returnDate"
-                    placeholder="Return" 
-                    value={searchData.returnDate}
-                    // value={this.state.returnCalendarActive && this.state.dateFrom}
-                    onChange={handleChange}
-                    onFocus={toggleCalendar}
-                    // disabled
-                  />
-                  {this.state.returnCalendarActive &&
-                    <Calendar
-                      handleChange={this.handleDateChange}
-                      startDate={this.state.startDate}
-                      endDate={this.state.endDate} 
-                      departureCalendarActive={departureCalendarActive}
-                      returnCalendarActive={returnCalendarActive}
-                      disableDates={date => date < this.state.returnDateLimit}
-                    />}
-                </div>
-              </div>
-              <div 
-                className="button is-info"
-                onClick={this.handleSubmit}>
-                Submit
-              </div>
-            </div>
-          </div>
-        </form>
-        <div className="flex-column">
-          {/* <ResultsCard
+      <section>
+        <RegionalSettings 
+          handleChange = {handleChange}
+        />
+        <div className="search-bar half-high flex-column centered">
+          <FlightSearchBar 
+            { ...{ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar }}
+          />
+        </div>
+        <div className="flex-column centered">
+          <ResultsCard
             flyFrom = {fakeFlighData.flyFrom}
             flyTo={fakeFlighData.flyTo}
             price={fakeFlighData.price}
@@ -211,19 +157,23 @@ class Home extends React.Component {
             route={fakeFlighData.route}
             dTime={fakeFlighData.dTime}
             aTime={fakeFlighData.aTime}
-            pnr_count={fakeFlighData.pnr_count}
-          /> */}
+          />
           {this.state.flightResults && this.state.flightResults.data.map(flight => (
             <ResultsCard key={flight.id}
               {...flight}
               currency = {this.state.flightResults.currency}/>
           ))}
         </div>
-        <div className="flex-row">
+        <div className="flex-row centered">
           {this.state.searches && (
             <p>{this.state.searches.length} searches and counting</p>
           )}
         </div>
+        <Map 
+          data = {fakeFlighData}
+          mapDropDown = {toggleMapDropDown}
+          flightOnMap = {flightOnMap}
+        />
       </section>
     )
   }

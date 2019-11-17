@@ -4,31 +4,43 @@ $base-borders: #808174;
 .small-text {
   font-size: 12px;
 }
-h1 {
-  margin-bottom: 10px;
-}
+
 .base-color {
   color: $base-borders;
 }
-body {
-  margin-top: 5vh;
+.search-bar {
+  background-color: blue;
+  height: 50vh;
+  background-image: url("https://www.smartertravel.com/uploads/2017/01/Airplane-Landing-Sunset-1400x500.jpg");
+  background-size: cover;
 }
 
 // calendar styles
 .absolute {
   position: absolute;
-  z-index: 1;
+  background-color: white;
 }
 //flexbox
 .flex-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
+
 .flex-row {
   display: flex;
+}
+
+.flex-end {
+  justify-content: flex-end;
+  align-items: flex-end; 
+}
+.space-around{
+  justify-content: space-around;
+  align-items: space-around;
+}
+.centered {
   justify-content: center;
+  align-items: center;
 }
 
 // card 
@@ -39,6 +51,12 @@ border-radius: 3px;
 margin: 1vh 0 1vh 0;
 }
 
+.with-shadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+// .left-margin {
+//   margin-left: 2vw;
+// }
 // width
 .auto-wide {
   max-width: auto;
@@ -46,16 +64,22 @@ margin: 1vh 0 1vh 0;
 .thirty-wide {
   width: 30vw;
 }
-.fifty-wide {
+.half-screen-wide {
   width: 50vw;
 }
 .twenty-percent-wide {
   width: 20%;
 }
+.quarter-parent-wide {
+   width: 25%;
+}
 .thirty-percent-wide {
   width: 30%;
 }
-.fifty-percent-wide {
+.fourty-percent-wide {
+  width: 40%;
+}
+.half-parent-wide {
   width: 50%;
 }
 .sixty-percent-wide {
@@ -64,12 +88,21 @@ margin: 1vh 0 1vh 0;
 .seventy-percent-wide {
   width: 70%;
 }
+.full-parent-wide {
+  width: 100%;
+}
 
 // height
 
 .ten-high {
   height: 10vh;
 }
-.twenty-high {
-  height: 20vh;
+.quarter-screen-high {
+  height: 25vh;
 }
+.half-screen-high {
+  height: 50vh;
+}
+
+//animations
+
