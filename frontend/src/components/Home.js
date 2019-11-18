@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import RegionalSettings from './RegionalSettings'
+import LoadingScreen from './Common/LoadingScreen'
 import FlightSearchBar from './FlightSearchBar'
 import ResultsCard from './ResultsCard'
 import Map from './Map'
@@ -11,6 +12,7 @@ class Home extends React.Component {
     super()
     this.state = {
       flightResults: null,
+      loading: false,
       fakeFlighData: {
         flyFrom: 'VNO',
         flyTo: 'NGO',
@@ -72,6 +74,7 @@ class Home extends React.Component {
       dateFrom: null,
       dateTo: null
     }
+    this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleCalendar = this.toggleCalendar.bind(this)
@@ -85,11 +88,15 @@ class Home extends React.Component {
     console.log(this.state.searchData)
     this.setState({ searchData })
   }
+  toggleLoadingScreen() {
+    return this.setState({ loading: true })
+  }
 
   handleSubmit(e) {
     // e.prevetDefault()
+    this.toggleLoadingScreen()
     axios.post('/api/proxyflights/', this.state.searchData)
-      .then(res => this.setState({ flightResults: res.data }), this.pushSearchtoDB())
+      .then(res => this.setState({ flightResults: res.data, loading: false }), this.pushSearchtoDB())
       .catch(err => console.log('errors', err))
   }
   pushSearchtoDB(){
@@ -147,7 +154,7 @@ class Home extends React.Component {
           />
         </div>
         <div className="flex-column centered">
-          <ResultsCard
+          {/* <ResultsCard
             flyFrom = {fakeFlighData.flyFrom}
             flyTo={fakeFlighData.flyTo}
             price={fakeFlighData.price}
@@ -157,7 +164,9 @@ class Home extends React.Component {
             route={fakeFlighData.route}
             dTime={fakeFlighData.dTime}
             aTime={fakeFlighData.aTime}
-          />
+          /> */}
+          {this.state.loading && <LoadingScreen 
+            message = {this.loadingMessage}/>}
           {this.state.flightResults && this.state.flightResults.data.map(flight => (
             <ResultsCard key={flight.id}
               {...flight}

@@ -19,3 +19,14 @@ class Search(models.Model):
 
     def __str__(self):
         return f'{self.id} to {self.origin} by {self.user} '
+
+class Proxy_Search(models.Model):
+
+    origin = models.CharField(max_length=50)
+    destination = models.CharField(max_length=50)
+    departure_date = models.CharField(max_length=20)
+    return_date = models.CharField(max_length=20, blank=True)
+    currency = models.CharField(max_length=20)
+
+    # def __str__(self):
+    #     return f'{self.id} to {self.origin} by {self.user} '

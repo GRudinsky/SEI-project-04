@@ -5,24 +5,29 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY, HTTP_204_NO_CONTENT
 from rest_framework import status
-from .models import Search
-from .serializers import SearchSerializer, PopulatedSearchSerializer
+from .models import Search, Proxy_Search
+from .serializers import SearchSerializer, PopulatedSearchSerializer, ProxySearchSerializer
 import requests
 
 class ListView(APIView):
 
     def post(self, request):
         data = request.data
-        origin = data.pop('origin')
-        destination = data.pop('destination')
-        departure_date = data.pop('departureDate')
-        return_date = data.pop('returnDate')
-        currency = data.pop('currency')
-        print(origin, destination, departure_date, return_date, currency)
-        url = f'https://api.skypicker.com/flights?fly_from={origin}&fly_to={destination}&dateFrom={departure_date}&dateTo={return_date}&curr={currency}&partner=picky'
-        r = requests.get(url)
-        data = r.json()
-        return Response(data, status=status.HTTP_200_OK)
+        args = {}
+        args['origin'] = data.pop('origin')
+        args['destination'] = data.pop('destination')
+        args['departure_date'] = data.pop('departureDate')
+        args['return_date'] = data.pop('returnDate')
+        args['currency'] = data.pop('currency')
+        # print(args)
+        proxy = ProxySearchSerializer(data=args)
+        if proxy.is_valid():
+            print('serializer valid')
+            url = f'https://api.skypicker.com/flights?fly_from={args["origin"]}&fly_to={args["destination"]}&dateFrom={args["departure_date"]}&dateTo={args["return_date"]}&curr={args["currency"]}&partner=picky'
+            r = requests.get(url)
+            data = r.json()
+            return Response(data, status=status.HTTP_200_OK)
+        return Response(proxy.errors, status=HTTP_422_UNPROCESSABLE_ENTITY)
 
 class SearchListView(APIView):
    
