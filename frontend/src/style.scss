@@ -55,9 +55,7 @@ margin: 1vh 0 1vh 0;
 .with-shadow {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-// .left-margin {
-//   margin-left: 2vw;
-// }
+
 // width
 .auto-wide {
   max-width: auto;
@@ -103,6 +101,11 @@ margin: 1vh 0 1vh 0;
 }
 .half-screen-high {
   height: 50vh;
+}
+
+// cursor styles 
+.cursor-pointer {
+  cursor: pointer;
 }
 
 //loading spinner

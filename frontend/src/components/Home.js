@@ -77,19 +77,28 @@ class Home extends React.Component {
     this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.toggleLocationDropDown = this.toggleLocationDropDown.bind(this)
+    this.closeLocationDropDown = this.closeLocationDropDown.bind(this)
     this.toggleCalendar = this.toggleCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
+    this.suggestLocations = this.suggestLocations.bind(this)
   }
   //form functions
   handleChange(e) {
-    const searchData = { ...this.state.searchData, [e.target.name]: e.target.value }
-    console.log(e.target.name)
+    const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
+    console.log('name', e.target.name)
+    console.log('title', e.target.id)
     console.log(this.state.searchData)
     this.setState({ searchData })
   }
   toggleLoadingScreen() {
     return this.setState({ loading: true })
+  }
+  locationOptions() {
+    return this.state.locationSuggestions && this.state.locationSuggestions.locations.map(location => (
+      { value: location.code, label: location.slug }
+    ))
   }
 
   handleSubmit(e) {
@@ -126,6 +135,18 @@ class Home extends React.Component {
   toggleCalendar(e) {
     e.target.name === 'departureDate' ? this.setState({ departureCalendarActive: true, returnCalendarActive: false }) : (e.target.name === 'returnDate' ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false }) )
   }
+  toggleLocationDropDown(e) {
+    e.target.name === 'origin' ? this.setState({ originDropDownActive: true, destinationDropDownActive: false }) : (e.target.name === 'destination' ? this.setState({ originDropDownActive: false, destinationDropDownActive: true }) : this.setState({ originDropDownActive: false, destinationDropDownActive: false }))
+  }
+  closeLocationDropDown(e) {
+    setTimeout(() => (this.state.searchData.origin && this.setState({ originDropDownActive: false }) || this.state.searchData.destination && this.setState({ destinationDropDownActive: false })), 200)
+  }
+  suggestLocations(e) {
+    console.log(e.target.value)
+    axios.get(`https://api.skypicker.com/locations?term=${e.target.value}&locale=en-US&location_types=airport&location_types=country&location_types=city&limit=10&active_only=true&sort=name`)
+      .then(res => this.setState({ locationSuggestions: res.data }))
+      .catch(err => console.log(err))
+  }
   // Map functions
   toggleMapDropDown(e) {
     console.log(e.target.id)
@@ -139,8 +160,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap } = this.state
-    const { handleChange, handleDateChange, handleSubmit, toggleCalendar, toggleMapDropDown } = this
+    const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap } = this.state
+    const { handleChange, handleDateChange, handleSubmit, toggleCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations, locationOptions } = this
 
     console.log('state', this.state)
     return (
@@ -150,7 +171,7 @@ class Home extends React.Component {
         />
         <div className="search-bar half-high flex-column centered">
           <FlightSearchBar 
-            { ...{ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar }}
+            {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown }}
           />
         </div>
         <div className="flex-column centered">
@@ -178,11 +199,11 @@ class Home extends React.Component {
             <p>{this.state.searches.length} searches and counting</p>
           )}
         </div>
-        <Map 
+        {/* <Map 
           data = {fakeFlighData}
           mapDropDown = {toggleMapDropDown}
           flightOnMap = {flightOnMap}
-        />
+        /> */}
       </section>
     )
   }
