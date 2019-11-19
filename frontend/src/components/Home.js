@@ -4,6 +4,7 @@ import RegionalSettings from './RegionalSettings'
 import LoadingScreen from './Common/LoadingScreen'
 import FlightSearchBar from './FlightSearchBar'
 import ResultsCard from './ResultsCard'
+import FlightSuggestions from './FlightSuggestions'
 import Map from './Map'
 import '@lls/react-light-calendar/dist/index.css'
 
@@ -13,6 +14,7 @@ class Home extends React.Component {
     this.state = {
       flightResults: null,
       loading: false,
+      defaultOrigin: 'LON',
       fakeFlighData: {
         flyFrom: 'VNO',
         flyTo: 'NGO',
@@ -160,7 +162,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap } = this.state
+    const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap, defaultOrigin } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations, locationOptions } = this
 
     console.log('state', this.state)
@@ -204,6 +206,10 @@ class Home extends React.Component {
           mapDropDown = {toggleMapDropDown}
           flightOnMap = {flightOnMap}
         /> */}
+        <FlightSuggestions 
+          defaultOrigin={defaultOrigin}
+          searchData={searchData}
+        />
       </section>
     )
   }
