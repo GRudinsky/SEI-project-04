@@ -8,11 +8,21 @@ $base-borders: #808174;
 .base-color {
   color: $base-borders;
 }
+.logo {
+  height: 50px;
+  width: 50px;
+}
 .search-bar {
   background-color: blue;
   height: 50vh;
   background-image: url("https://www.smartertravel.com/uploads/2017/01/Airplane-Landing-Sunset-1400x500.jpg");
   background-size: cover;
+}
+.image-tile {
+  height: 250px;
+}
+.without-margin {
+  margin: 0;
 }
 
 // calendar styles
@@ -39,9 +49,16 @@ $base-borders: #808174;
   justify-content: space-around;
   align-items: space-around;
 }
+.space-between{
+  justify-content: space-between;
+  align-items: space-between;
+}
 .centered {
   justify-content: center;
   align-items: center;
+}
+.wrap {
+  flex-wrap: wrap;
 }
 
 // card 
@@ -101,6 +118,10 @@ margin: 1vh 0 1vh 0;
 }
 .half-screen-high {
   height: 50vh;
+}
+//backgrounds 
+.with-background {
+  background-color: blue;
 }
 
 // cursor styles 

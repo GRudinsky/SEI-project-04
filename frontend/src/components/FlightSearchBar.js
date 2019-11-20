@@ -4,7 +4,7 @@ import SelectBox from './SelectBox'
 
 import Select from 'react-select'
 
-const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, closeLocationDropDown, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar, suggestLocations }) => {
+const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, closeLocationDropDown, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar, suggestLocations, clearLocationState }) => {
   return (
     <form className="container" value="form" onSubmit={handleSubmit} onFocus={toggleCalendar}>
       <div className="flex-row">
@@ -12,10 +12,11 @@ const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, 
           <div className="control">
             <input className="full-parent-wide" 
               type="text" name="origin" 
-              placeholder="From" 
+              placeholder="Origin" 
               // value={searchData.origin}
               onChange={suggestLocations}
               onFocus={toggleLocationDropDown}
+              // onClick={clearLocationState}
               onBlur={closeLocationDropDown}
               autoComplete="off"
             />
@@ -38,13 +39,22 @@ const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, 
           <div className="control">
             <input className="full-parent-wide" 
               type="text" name="destination" 
-              placeholder="To" 
+              placeholder="Destination" 
               // value={searchData.destination} 
               onChange={suggestLocations}
               onFocus={toggleLocationDropDown}
               onBlur={closeLocationDropDown}
               autoComplete="off"
             />
+            {/* <SelectBox 
+              onChange={handleChange} 
+              value={searchData.destination}
+              name="destination" 
+              
+              locationSuggestions = {locationSuggestions}
+            /> */}
+
+
             {destinationDropDownActive && 
             <div className="flex-column absolute half-parent-wide cursor-pointer with-shadow">
               {locationSuggestions && locationSuggestions.locations.map(location => (
@@ -67,7 +77,7 @@ const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, 
             <input className="full-parent-wide" 
               type="text" 
               name="departureDate" 
-              placeholder="Departure" 
+              placeholder="Date From" 
               value={searchData.departureDate}
               // value={departureCalendarActive && dateFrom}
               onChange={handleChange} 
@@ -77,7 +87,7 @@ const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, 
           </div>
           {departureCalendarActive &&
                 <Calendar
-                  {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive }}
+                  {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar }}
                   disableDates={date => date < new Date() - 86400000}
                 />}
         </div>
@@ -85,8 +95,8 @@ const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, 
           <div className="control">
             <input className="full-parent-wide" 
               type="text" 
-              name="returnDate" 
-              placeholder="Return" 
+              name="returnDate"
+              placeholder="Date To" 
               value={searchData.returnDate}
               // value={returnCalendarActive && dateFrom}
               onChange={handleChange} 

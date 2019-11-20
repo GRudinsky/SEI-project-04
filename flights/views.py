@@ -9,8 +9,7 @@ from .models import Search, Proxy_Search
 from .serializers import SearchSerializer, PopulatedSearchSerializer, ProxySearchSerializer
 import requests
 
-class ListView(APIView):
-
+class ListView(APIView): #proxy request to kiwi to perform flightsearch
     def post(self, request):
         data = request.data
         args = {}
@@ -29,6 +28,16 @@ class ListView(APIView):
             return Response(data, status=status.HTTP_200_OK)
         return Response(proxy.errors, status=HTTP_422_UNPROCESSABLE_ENTITY)
 
+class ImageDetailView(APIView):
+    def post(self, request):
+        string = request.data.pop('string')
+        api_key = '14337005-422367ef135c835c456f44f6e'
+        print(string)
+        url = f'https://pixabay.com/api/?key={api_key}&q={string}&image_type=photo'
+        r = requests.get(url)
+        data = r.json()
+        return Response(data, status=status.HTTP_200_OK)
+       
 class SearchListView(APIView):
    
     def get(self, _request): # method to handle GET requests to the list view, the INDEX
