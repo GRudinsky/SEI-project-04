@@ -80,30 +80,21 @@ class Home extends React.Component {
     this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.toggleLocationDropDown = this.toggleLocationDropDown.bind(this)
-    this.closeLocationDropDown = this.closeLocationDropDown.bind(this)
     this.toggleCalendar = this.toggleCalendar.bind(this)
     this.closeCalendar = this.closeCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
-    this.suggestLocations = this.suggestLocations.bind(this)
-    this.clearLocationState = this.clearLocationState.bind(this)
   }
   //form functions
   handleChange(e) {
     const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
-    console.log('name', e.target.name)
+    // console.log('name', e.target.name)
     console.log('title', e.target.id)
     console.log(this.state.searchData)
     this.setState({ searchData })
   }
   toggleLoadingScreen() {
     return this.setState({ loading: true })
-  }
-  locationOptions() {
-    return this.state.locationSuggestions && this.state.locationSuggestions.locations.map(location => (
-      { value: location.code, label: location.slug }
-    ))
   }
 
   handleSubmit(e) {
@@ -142,22 +133,6 @@ class Home extends React.Component {
   }
   closeCalendar(e) {
     setTimeout(() => (this.state.departureDate && this.setState({ departureCalendarActive: false }) || this.state.returnDate && this.setState({ returnCalendarActive: false })), 200)
-  }
-  toggleLocationDropDown(e) {
-    e.target.name === 'origin' ? this.setState({ originDropDownActive: true, destinationDropDownActive: false }) : (e.target.name === 'destination' ? this.setState({ originDropDownActive: false, destinationDropDownActive: true }) : this.setState({ originDropDownActive: false, destinationDropDownActive: false }))
-  }
-  closeLocationDropDown(e) {
-    setTimeout(() => (this.state.searchData.origin && this.setState({ originDropDownActive: false }) || this.state.searchData.destination && this.setState({ destinationDropDownActive: false })), 200)
-  }
-  suggestLocations(e) {
-    console.log(e.target.value)
-    axios.get(`https://api.skypicker.com/locations?term=${e.target.value}&locale=en-US&location_types=airport&location_types=country&location_types=city&limit=10&active_only=true&sort=name`)
-      .then(res => this.setState({ locationSuggestions: res.data }))
-      .catch(err => console.log(err))
-  }
-  clearLocationState(e) {
-    console.log('clearing origin')
-    this.searchData.setState({ origin: null })
   }
   // Map functions
   toggleMapDropDown(e) {
@@ -218,11 +193,11 @@ class Home extends React.Component {
           mapDropDown = {toggleMapDropDown}
           flightOnMap = {flightOnMap}
         /> */}
-        {(!this.state.flightResults && !this.state.loading) &&
+        {/* {(!this.state.flightResults && !this.state.loading) &&
           <FlightSuggestions 
             defaultOrigin={defaultOrigin}
             searchData={searchData}
-          />}
+          />} */}
       </section>
     )
   }

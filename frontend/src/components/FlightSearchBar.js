@@ -1,90 +1,39 @@
 import React from 'react'
+import LocationSearch from './LocationSearch'
 import Calendar from './Calendar'
-import SelectBox from './SelectBox'
+import Calendario from './Calendario'
 
-import Select from 'react-select'
-
-const FlightSearchBar = ({ searchData, locationOptions, toggleLocationDropDown, closeLocationDropDown, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar, suggestLocations, clearLocationState }) => {
+const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar }) => {
   return (
     <form className="container" value="form" onSubmit={handleSubmit} onFocus={toggleCalendar}>
       <div className="flex-row">
         <div className="half-parent-wide">
-          <div className="control">
-            <input className="full-parent-wide" 
-              type="text" name="origin" 
-              placeholder="Origin" 
-              // value={searchData.origin}
-              onChange={suggestLocations}
-              onFocus={toggleLocationDropDown}
-              // onClick={clearLocationState}
-              onBlur={closeLocationDropDown}
-              autoComplete="off"
-            />
-            {originDropDownActive && 
-            <div className="flex-column absolute half-parent-wide cursor-pointer">
-              {locationSuggestions && locationSuggestions.locations.map(location => (
-                <div 
-                  key={locationSuggestions.locations.indexOf(location)} 
-                  title="origin"
-                  id={location.code}
-                  onClick={handleChange}>
-                  {location.name} {location.type.charAt(0).toUpperCase() + location.type.slice(1)} - {location.code}
-                </div>
-              ))
-              }
-            </div>}
-          </div>
+          <LocationSearch 
+            handleChange={handleChange}
+            divTitle="origin"
+          />
         </div>
         <div className="half-parent-wide">
-          <div className="control">
-            <input className="full-parent-wide" 
-              type="text" name="destination" 
-              placeholder="Destination" 
-              // value={searchData.destination} 
-              onChange={suggestLocations}
-              onFocus={toggleLocationDropDown}
-              onBlur={closeLocationDropDown}
-              autoComplete="off"
-            />
-            {/* <SelectBox 
-              onChange={handleChange} 
-              value={searchData.destination}
-              name="destination" 
-              
-              locationSuggestions = {locationSuggestions}
-            /> */}
-
-
-            {destinationDropDownActive && 
-            <div className="flex-column absolute half-parent-wide cursor-pointer with-shadow">
-              {locationSuggestions && locationSuggestions.locations.map(location => (
-                <div
-                  key={locationSuggestions.locations.indexOf(location)}
-                  title="destination"
-                  id={location.code}
-                  onClick={handleChange}>
-                  {location.name} {location.type.charAt(0).toUpperCase() + location.type.slice(1)} - {location.code}
-                </div>
-              ))
-              }
-            </div>}
-          </div>
+          <LocationSearch
+            handleChange={handleChange}
+            divTitle="destination"
+          />
         </div>
       </div>
       <div className="flex-row">
+        {/* <Calendario handleChange={handleChange}
+          dateFrom={searchData.departureDate} dateTo={searchData.returnDate}
+          startDate={startDate} endDate={endDate}/> */}
         <div className="half-parent-wide">
-          <div className="control">
-            <input className="full-parent-wide" 
-              type="text" 
-              name="departureDate" 
-              placeholder="Date From" 
-              value={searchData.departureDate}
-              // value={departureCalendarActive && dateFrom}
-              onChange={handleChange} 
-              onFocus={toggleCalendar} 
-              autoComplete="off"
-            />
-          </div>
+          <input className="full-parent-wide" 
+            type="text" 
+            name="departureDate" 
+            placeholder="Date From" 
+            value={searchData.departureDate}
+            onChange={handleChange} 
+            onFocus={toggleCalendar} 
+            autoComplete="off"
+          />
           {departureCalendarActive &&
                 <Calendar
                   {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar }}
