@@ -46,7 +46,7 @@ class LocationSearch extends React.Component {
       <input className="full-parent-wide"
         type="text" 
         name={this.props.divTitle}
-        placeholder={this.props.divTitle}   
+        placeholder={this.props.divTitle.charAt(0).toUpperCase() + this.props.divTitle.slice(1) }   
         value={searchFieldValue}
         onChange={suggestLocations}
         onClick={deleteLocation}

@@ -13,35 +13,37 @@ class Calendario extends React.Component{
       calendarActive: false
     }
     this.toggleCalendar = this.toggleCalendar.bind(this)
+    // this.handledateChange = this.handledateChange.bind(this)
 
   }
   getDate(value) {
     const time = new Date(value)
     return `${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`
   }
-  toggleCalendar(e) {
+  toggleCalendar() {
     !this.state.calendarActive ? this.setState({ calendarActive: true }) : this.setState({ calendarActive: false })
   }
-  handleDateChange(startDate, endDate) {
-    this.props.dateFrom = this.getDate(startDate)
-    this.props.dateTo = this.getDate(endDate)
-  }
+  // handleDateChange(startDate, endDate) {
+  //   this.props.dateFrom = this.getDate(startDate)
+  //   this.props.dateTo = this.getDate(endDate)
+  // }
   render() {
     const { calendarActive } = this.state
-    const { toggleCalendar, handleDateChange } = this
+    const { toggleCalendar } = this
     return (
       <div className="half-parent-wide">
-        <input className="full-parent-wide"
-          type="text"
-          name="departureDate"
-          placeholder="Date From"
-          value={this.props.date}
-          onChange={this.props.handleChange}
-          onFocus={toggleCalendar}
-          autoComplete="off"
-        />
+        <div 
+          className="button full-parent-wide"
+          title="departureDate"
+          onClick={toggleCalendar}>
+        </div>
         {calendarActive && <div className="calendar absolute">
-          <ReactLightCalendar startDate={this.props.startDate} endDate={this.props.endDate} onChange={handleDateChange} disableDates={this.props.disableDates} />
+          <ReactLightCalendar 
+            startDate={this.props.startDate} 
+            endDate={this.props.endDate} 
+            disableDates={this.props.disableDates} 
+            handleDateChange={this.props.handleDateChange}
+          />
         </div>}
       </div>
     )

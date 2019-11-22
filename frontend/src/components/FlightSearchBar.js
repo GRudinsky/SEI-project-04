@@ -3,9 +3,9 @@ import LocationSearch from './LocationSearch'
 import Calendar from './Calendar'
 import Calendario from './Calendario'
 
-const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar }) => {
+const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }) => {
   return (
-    <form className="container" value="form" onSubmit={handleSubmit} onFocus={toggleCalendar}>
+    <form className="container" value="form" onSubmit={handleSubmit} >
       <div className="flex-row">
         <div className="half-parent-wide">
           <LocationSearch 
@@ -21,38 +21,40 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
         </div>
       </div>
       <div className="flex-row">
-        {/* <Calendario handleChange={handleChange}
-          dateFrom={searchData.departureDate} dateTo={searchData.returnDate}
-          startDate={startDate} endDate={endDate}/> */}
+        {/* <Calendario 
+          disableDates={date => date < new Date() - 86400000}
+          handleDateChange={handleDateChange}
+          // dateFrom={searchData.departureDate} 
+          // dateTo={searchData.returnDate}
+          startDate={startDate} 
+          endDate={endDate}
+        /> */}
         <div className="half-parent-wide">
-          <input className="full-parent-wide" 
-            type="text" 
-            name="departureDate" 
-            placeholder="Date From" 
-            value={searchData.departureDate}
-            onChange={handleChange} 
-            onFocus={toggleCalendar} 
-            autoComplete="off"
-          />
+          <div 
+            title="departureDate" 
+            className="card full-parent-wide"
+            id={searchData.departureDate} 
+            onChange={handleChange}
+            onClick={toggleDepartureCalendar} 
+          >
+            <p className="input-text base-color">{searchData.departureDate ? searchData.departureDate : 'Departure From Date'}</p>
+          </div>
           {departureCalendarActive &&
                 <Calendar
                   {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar }}
                   disableDates={date => date < new Date() - 86400000}
+                
                 />}
         </div>
         <div className="half-parent-wide">
-          <div className="control">
-            <input className="full-parent-wide" 
-              type="text" 
-              name="returnDate"
-              placeholder="Date To" 
-              value={searchData.returnDate}
-              // value={returnCalendarActive && dateFrom}
-              onChange={handleChange} 
-              onFocus={toggleCalendar} 
-              autoComplete="off"
-              // disabled
-            />
+          <div
+            title="returntureDate"
+            className="card without-margin full-parent-wide"
+            id={searchData.returnDate}
+            onChange={handleChange}
+            onClick={toggleReturnCalendar}
+          >
+            <p className="input-text base-color">{searchData.returnDate ? searchData.returnDate : 'Departure To Date:'}</p>
           </div>
           {returnCalendarActive &&
                 <Calendar

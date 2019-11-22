@@ -80,8 +80,9 @@ class Home extends React.Component {
     this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.toggleCalendar = this.toggleCalendar.bind(this)
-    this.closeCalendar = this.closeCalendar.bind(this)
+    this.toggleDepartureCalendar = this.toggleDepartureCalendar.bind(this)
+    this.toggleReturnCalendar = this.toggleReturnCalendar.bind(this)
+    // this.closeCalendar = this.closeCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
   }
@@ -128,12 +129,16 @@ class Home extends React.Component {
       }
     })
   }
-  toggleCalendar(e) {
-    e.target.name === 'departureDate' ? this.setState({ departureCalendarActive: true, returnCalendarActive: false }) : (e.target.name === 'returnDate' ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false }) )
+  toggleDepartureCalendar(e) {
+    !this.state.departureCalendarActive ? this.setState({ departureCalendarActive: true, departureDate: null, returnCalendarActive: false }, this.resetDepartureDate()) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
   }
-  closeCalendar(e) {
-    setTimeout(() => (this.state.departureDate && this.setState({ departureCalendarActive: false }) || this.state.returnDate && this.setState({ returnCalendarActive: false })), 200)
+  toggleReturnCalendar(e) {
+    !this.state.returnCalendarActive ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
   }
+  resetDepartureDate() {
+    this.setState({ ...this.state.searchData, departureDate: null })
+  }
+
   // Map functions
   toggleMapDropDown(e) {
     console.log(e.target.id)
@@ -148,7 +153,7 @@ class Home extends React.Component {
 
   render() {
     const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap, defaultOrigin, clearLocationState } = this.state
-    const { handleChange, handleDateChange, handleSubmit, toggleCalendar, closeCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations } = this
+    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, closeCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations } = this
     console.log('state', this.state)
     return (
       <section>
@@ -165,7 +170,7 @@ class Home extends React.Component {
         </div>
         <div className="search-bar with-shadow half-high flex-column centered">
           <FlightSearchBar 
-            {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState }}
+            {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState }}
           />
         </div>
         <div className="flex-column centered">
@@ -193,11 +198,11 @@ class Home extends React.Component {
           mapDropDown = {toggleMapDropDown}
           flightOnMap = {flightOnMap}
         /> */}
-        {/* {(!this.state.flightResults && !this.state.loading) &&
+        {(!this.state.flightResults && !this.state.loading) &&
           <FlightSuggestions 
             defaultOrigin={defaultOrigin}
             searchData={searchData}
-          />} */}
+          />}
       </section>
     )
   }

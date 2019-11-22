@@ -37,20 +37,25 @@ class FlightSuggestions extends React.Component {
   }
   getSuggestions() { // getting cheapest direct flight suggestions from origin to all destinations in number of months that equals to this.monthsAhead value.
     axios.get(`https://api.skypicker.com/flights?fly_from=${this.origin}&fly_to=&dateFrom=${this.getFlightDate()}&one_for_city=1&location_types=airport&location_types=country&location_types=city&direct_flights=1&curr=${this.currency}&partner=picky`)
-      .then(res => this.setState({ suggestionResults: res.data }))
+      .then(res => this.setState({ suggestionResults: res.data },this.findLocalCity()))
       .catch(err => console.log('errors', err))
   }
-  
+  findLocalCity() {
+    axios.get(`https://api.skypicker.com/locations?term=${this.origin}&locale=en-US&&location_types=city&limit=10&active_only=true&sort=name`)
+      .then(res => this.setState({ localCity: res.data.locations[0].name }))
+      .catch(err => console.log(err))
+  }
  
   render() {
-    console.log(this.state)
+  
     const { monthsAhead, flightDurations } = this
     const { suggestionResults } = this.state
+    console.log(this.state)
     if (!suggestionResults) return null
     return (
       <div className="container">
-        <h2>Fly to these destinations in {monthsAhead} months time:</h2>
-        <div className="flex-row space-around wrap">
+        <h2>Fly from {this.state.localCity} in {monthsAhead} months time:</h2>
+        <div className="flex-row space-between with-scroll">
 
           {flightDurations.forEach(duration => {
             this.getCheapestByDuration(suggestionResults.data, duration)[0] &&

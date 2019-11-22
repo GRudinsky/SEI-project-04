@@ -1,10 +1,13 @@
 
-$base-borders: #808174;
+$base-borders: #888;
 
 .small-text {
   font-size: 12px;
 }
-
+.input-text {
+  margin: 0px;
+  padding: 6px 10px;
+}
 .base-color {
   color: $base-borders;
 }
@@ -19,10 +22,18 @@ $base-borders: #808174;
   background-size: cover;
 }
 .image-tile {
-  height: 250px;
+  height: 200px;
 }
 .without-margin {
   margin: 0;
+}
+.margin-width-1v {
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
+.margin-height-1v {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 
 // calendar styles
@@ -60,14 +71,18 @@ $base-borders: #808174;
 .wrap {
   flex-wrap: wrap;
 }
+.with-scroll {
+  overflow: scroll;
+}
 
 // card 
 
 .card {
 border: 1px solid $base-borders;
-border-radius: 3px;
-margin: 1vh 0 1vh 0;
+border-radius: 4px;
+background: white;
 }
+
 
 .with-shadow {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -87,7 +102,7 @@ margin: 1vh 0 1vh 0;
   width: 20%;
 }
 .quarter-parent-wide {
-   width: 25%;
+   min-width: 25%;
 }
 .thirty-percent-wide {
   width: 30%;
@@ -133,7 +148,7 @@ margin: 1vh 0 1vh 0;
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid #020303;
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite; /* Safari */

@@ -13,7 +13,7 @@ const getTime = (value) => {
 }
 
 const ResultsCard = ( { ...flight }, { currency } ) => (
-  <div className="card with-shadow flex-row centered half-screen-wide quarter-screen-high" key={flight.id}>
+  <div className="card with-shadow flex-row centered half-screen-wide quarter-screen-high margin-height-1v" key={flight.id}>
     <div className="flex-column centered quarter-parent-wide">
       <span className="small-text">Layovers:{flight.route.length - 1}</span>
       {flight.route && flight.route.map(fly => (
