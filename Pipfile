@@ -8,10 +8,11 @@ pylint = "*"
 
 [packages]
 django = "*"
-psycopg2-binary = "*"
 djangorestframework = "*"
 requests = "*"
 pyjwt = "*"
+psycopg2-binary = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.7"

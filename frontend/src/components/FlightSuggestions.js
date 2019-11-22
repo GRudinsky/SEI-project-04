@@ -88,7 +88,6 @@ class FlightSuggestions extends React.Component {
               conversion={flight.conversion}
               cityTo={flight.cityTo}
               flight={flight}
-              
             />
           ))
           }
