@@ -2,16 +2,16 @@ import React from 'react'
 import axios from 'axios'
 import SuggestionsCard from './SuggestionsCard'
 
+const suggestionsByDuration = []
+
 class FlightSuggestions extends React.Component {
-  constructor({ defaultOrigin, searchData }) {
-    super(defaultOrigin, searchData)
+  constructor() {
+    super()
     this.state = {
       suggestionResults: null
     }
-    this.flightDurations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-    this.origin = defaultOrigin
+    this.flightDurations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
     this.monthsAhead = 1
-    this.currency = searchData.currency
   }
 
   componentDidMount() {
@@ -33,273 +33,41 @@ class FlightSuggestions extends React.Component {
   }
   getCheapestByDuration(data, hours) {
     const result = data.filter(flight => (this.getHoursOnly(flight.duration.total) < hours && this.getHoursOnly(flight.duration.total) > (hours - 2) ))
-    return [result[0]]
+    return result[0]
   }
   getSuggestions() { // getting cheapest direct flight suggestions from origin to all destinations in number of months that equals to this.monthsAhead value.
-    axios.get(`https://api.skypicker.com/flights?fly_from=${this.origin}&fly_to=&dateFrom=${this.getFlightDate()}&one_for_city=1&location_types=airport&location_types=country&location_types=city&direct_flights=1&curr=${this.currency}&partner=picky`)
+    axios.get(`https://api.skypicker.com/flights?fly_from=${this.props.defaultOrigin}&fly_to=&dateFrom=${this.getFlightDate()}&one_for_city=1&location_types=airport&location_types=country&location_types=city&direct_flights=1&curr=${this.props.searchData.currency}&partner=picky`)
       .then(res => this.setState({ suggestionResults: res.data },this.findLocalCity()))
       .catch(err => console.log('errors', err))
   }
   findLocalCity() {
-    axios.get(`https://api.skypicker.com/locations?term=${this.origin}&locale=en-US&&location_types=city&limit=10&active_only=true&sort=name`)
+    axios.get(`https://api.skypicker.com/locations?term=${this.props.defaultOrigin}&locale=en-US&&location_types=city&limit=10&active_only=true&sort=name`)
       .then(res => this.setState({ localCity: res.data.locations[0].name }))
       .catch(err => console.log(err))
   }
- 
   render() {
-  
     const { monthsAhead, flightDurations } = this
     const { suggestionResults } = this.state
-    console.log(this.state)
+    // console.log(suggestionsByDuration)
     if (!suggestionResults) return null
     return (
       <div className="container">
         <h2>Fly from {this.state.localCity} in {monthsAhead} months time:</h2>
         <div className="flex-row space-between with-scroll">
-
-          {flightDurations.forEach(duration => {
-            this.getCheapestByDuration(suggestionResults.data, duration)[0] &&
-          this.getCheapestByDuration(suggestionResults.data, duration).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-        
-          ))
-          })}
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[0])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[0]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-              hours={1}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[1])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[1]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[2])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[2]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[3])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[3]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[4])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[4]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[5])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[5]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[6])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[6]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[7])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[7]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[8])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[8]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[9])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[9]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[10])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[10]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[11])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[11]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[12])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[12]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[13])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[13]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[14])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[14]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[15])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[15]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[16])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[16]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[17])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[17]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[18])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[18]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[19])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[19]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[20])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[20]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[21])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[21]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
-          }
-          {this.getCheapestByDuration(suggestionResults.data, flightDurations[22])[0] && this.getCheapestByDuration(suggestionResults.data, flightDurations[22]).map(flight => (
-            <SuggestionsCard key={suggestionResults.data.indexOf(flight)}
-              price={flight.price}
-              duration={flight.duration.total}
-              conversion={flight.conversion}
-              cityTo={flight.cityTo}
-              flight={flight}
-            />
-          ))
+          {flightDurations.filter(duration => (suggestionResults.data.map(flight => this.getHoursOnly(flight.duration.total)).includes(duration)))
+            .forEach(duration => suggestionsByDuration.push(this.getCheapestByDuration(suggestionResults.data, duration)))}
+          {
+            suggestionsByDuration.filter(flight => flight !== undefined)
+              .map(flight => (
+                <SuggestionsCard 
+                  key={flight.id}
+                  price={flight.price}
+                  duration={flight.duration.total}
+                  conversion={flight.conversion}
+                  cityTo={flight.cityTo}
+                  flight={flight}
+                />
+              ))
           }
         </div>
       </div>

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve:front": "webpack-dev-server --mode=development",
-    "serve:back": "python manage.py runserver 4000",
+    "serve:back": "python manage.py runserver",
+    "serve:backend": "python manage.py runserver 4000",
     "build": "webpack -p"
   },
   "author": "",

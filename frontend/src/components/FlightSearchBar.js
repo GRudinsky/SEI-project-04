@@ -1,7 +1,6 @@
 import React from 'react'
 import LocationSearch from './LocationSearch'
 import Calendar from './Calendar'
-import Calendario from './Calendario'
 
 const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }) => {
   return (
@@ -21,14 +20,6 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
         </div>
       </div>
       <div className="flex-row">
-        {/* <Calendario 
-          disableDates={date => date < new Date() - 86400000}
-          handleDateChange={handleDateChange}
-          // dateFrom={searchData.departureDate} 
-          // dateTo={searchData.returnDate}
-          startDate={startDate} 
-          endDate={endDate}
-        /> */}
         <div className="half-parent-wide">
           <div 
             title="departureDate" 
@@ -43,7 +34,6 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
                 <Calendar
                   {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar }}
                   disableDates={date => date < new Date() - 86400000}
-                
                 />}
         </div>
         <div className="half-parent-wide">
