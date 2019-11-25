@@ -33,10 +33,12 @@ class LocationSearch extends React.Component {
   }
 
   suggestLocations(e) {
-    axios.get(`https://api.skypicker.com/locations?term=${e.target.value}&locale=en-US&location_types=airport&location_types=country&location_types=city&limit=10&active_only=true&sort=name`)
+    const obj = { 'searchString': e.target.value }
+    axios.post('/api/proxy/locationSuggestions/', obj)
       .then(res => this.setState({ locationSuggestions: res.data }))
       .catch(err => console.log(err))
   }
+
   render () {
     const { dropdownActive, locationSuggestions, searchFieldValue } = this.state
     const { suggestLocations, openDropdown, setLocation, deleteLocation } = this

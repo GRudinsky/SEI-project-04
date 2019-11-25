@@ -14,9 +14,9 @@ class SuggestionsCard extends React.Component {
   }
 
   getImage(value) {
-    const obj = { 'string': value }
+    const obj = { 'searchString': value }
     !this.state.backgroundImage && 
-    axios.post('/api/proxyimages/', obj)
+    axios.post('/api/proxy/imageSearch/', obj)
       .then(res => this.setState({ backgroundImage: res.data.hits[Math.floor(Math.random() * res.data.hits.length)].webformatURL }))
       .catch(err => console.log('errors', err))
   

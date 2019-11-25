@@ -21,25 +21,49 @@ class ListView(APIView): #proxy request to kiwi to perform flightsearch
         # print(args)
         proxy = ProxySearchSerializer(data=args)
         if proxy.is_valid():
-            print('serializer valid')
+            # print('serializer valid')
             url = f'https://api.skypicker.com/flights?fly_from={args["origin"]}&fly_to={args["destination"]}&dateFrom={args["departure_date"]}&dateTo={args["return_date"]}&curr={args["currency"]}&partner=picky'
             r = requests.get(url)
             data = r.json()
             return Response(data, status=status.HTTP_200_OK)
         return Response(proxy.errors, status=HTTP_422_UNPROCESSABLE_ENTITY)
 
-class ImageDetailView(APIView):
+class FlightSuggestionsListView(APIView):
     def post(self, request):
-        string = request.data.pop('string')
-        api_key = '14337005-422367ef135c835c456f44f6e'
-        print(string)
-        url = f'https://pixabay.com/api/?key={api_key}&q={string}&image_type=photo'
+        data = request.data
+        print('data', data)
+        url = f'https://api.skypicker.com/flights?fly_from={data["origin"]}&fly_to=&dateFrom={data["date"]}&one_for_city=1&location_types=airport&location_types=country&location_types=city&direct_flights=1&curr={data["currency"]}&partner=picky'
         r = requests.get(url)
         data = r.json()
         return Response(data, status=status.HTTP_200_OK)
-       
-class SearchListView(APIView):
+
+class ImageDetailView(APIView):
+    def post(self, request):
+        search_string = request.data.pop('searchString')
+        api_key = '14337005-422367ef135c835c456f44f6e'
+        url = f'https://pixabay.com/api/?key={api_key}&q={search_string}&image_type=photo'
+        r = requests.get(url)
+        data = r.json()
+        return Response(data, status=status.HTTP_200_OK)
+
+class LocationSuggestionsListView(APIView):
+    def post(self, request):
+        search_string = request.data.pop('searchString')
+        url = f'https://api.skypicker.com/locations?term={search_string}&locale=en-US&location_types=airport&location_types=country&location_types=city&limit=10&active_only=true&sort=name'
+        r = requests.get(url)
+        data = r.json()
+        return Response(data, status=status.HTTP_200_OK)
    
+class CityDetailView(APIView):
+    def post(self, request): 
+        search_string = request.data.pop('searchString')
+        url = f'https://api.skypicker.com/locations?term=${search_string}&locale=en-US&&location_types=city&limit=10&active_only=true&sort=name'
+        r = requests.get(url)
+        data = r.json()
+        # print(data["locations"][0]["name"])
+        return Response(data["locations"][0]["name"], status=status.HTTP_200_OK)
+
+class SearchListView(APIView):
     def get(self, _request): # method to handle GET requests to the list view, the INDEX
         searches = Search.objects.all() # get all the posts from the DB
         serialized_searches = PopulatedSearchSerializer (searches, many=True) # serialise those posts into JSON, letting it know to expect a list of posts as this is an INDEX route!!!!!

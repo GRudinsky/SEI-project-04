@@ -99,7 +99,7 @@ class Home extends React.Component {
   handleSubmit(e) {
     // e.prevetDefault()
     this.toggleLoadingScreen()
-    axios.post('/api/proxyflights/', this.state.searchData)
+    axios.post('/api/proxy/flightSearch/', this.state.searchData)
       .then(res => this.setState({ flightResults: res.data, loading: false }), this.pushSearchtoDB())
       .catch(err => console.log('errors', err))
   }
