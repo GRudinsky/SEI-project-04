@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import django_heroku
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,6 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '$n33g!*cu%k7o0+6u^ke77tn7^-2-xzfy837b+rrjor%k@gz3*'
+# PIXABAY_API_KEY = os.getenv('PIXABAY_API_KEY')
+PIXABAY_API_KEY = '14337005-422367ef135c835c456f44f6e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

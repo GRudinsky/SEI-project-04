@@ -66,7 +66,7 @@ class FlightSuggestions extends React.Component {
     if (!this.state.suggestionResults) return null
     return (
       <div className="container">
-        <h2>Fly from {this.state.localCity} in {this.monthsAhead} months time:</h2>
+        <h3 className="bold-font">Fly from {this.state.localCity} in {this.monthsAhead} months time:</h3>
         <div className="flex-row space-between with-scroll">
           {suggestionsByDuration.filter(flight => flight !== undefined)
             .map(flight => (

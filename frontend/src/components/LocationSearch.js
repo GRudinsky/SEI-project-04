@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCity, faPlaneDeparture, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons'
 
 class LocationSearch extends React.Component {
   constructor () {
@@ -38,8 +40,13 @@ class LocationSearch extends React.Component {
       .then(res => this.setState({ locationSuggestions: res.data }))
       .catch(err => console.log(err))
   }
+  setIcon(arg) {
+    return (arg === 'country' ? <FontAwesomeIcon icon={faGlobeAmericas} /> : (arg === 'airport' ? <FontAwesomeIcon icon={faPlaneDeparture} /> : <FontAwesomeIcon icon={faCity} /> ))
+  }
+
 
   render () {
+    console.log(this.state)
     const { dropdownActive, locationSuggestions, searchFieldValue } = this.state
     const { suggestLocations, openDropdown, setLocation, deleteLocation } = this
    
@@ -56,15 +63,15 @@ class LocationSearch extends React.Component {
         autoComplete="off"
       />
           {dropdownActive &&
-      <div className="flex-column absolute half-parent-wide cursor-pointer">
+      <div className="flex-column absolute half-parent-wide cursor-pointer with-shadow">
         {locationSuggestions && locationSuggestions.locations.map(location => (
-          <div
+          <div className="location-suggestion padding-5px"
             key={locationSuggestions.locations.indexOf(location)}
             title={this.props.divTitle}
             id={location.code}
             onClick={setLocation}
           >
-            {location.name} {location.type.charAt(0).toUpperCase() + location.type.slice(1)} - {location.code}
+            {this.setIcon(location.type)}   {location.code}  {location.name}  
           </div>
         ))
         }

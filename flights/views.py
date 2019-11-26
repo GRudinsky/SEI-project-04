@@ -1,5 +1,6 @@
 #pylint: disable=no-member
 from django.shortcuts import render
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
@@ -40,7 +41,7 @@ class FlightSuggestionsListView(APIView):
 class ImageDetailView(APIView):
     def post(self, request):
         search_string = request.data.pop('searchString')
-        api_key = '14337005-422367ef135c835c456f44f6e'
+        api_key = settings.PIXABAY_API_KEY
         url = f'https://pixabay.com/api/?key={api_key}&q={search_string}&image_type=photo'
         r = requests.get(url)
         data = r.json()

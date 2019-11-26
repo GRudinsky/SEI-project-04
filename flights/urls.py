@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import ListView, SearchListView, ImageDetailView, CityDetailView, LocationSuggestionsListView, FlightSuggestionsListView
-# from . import views
 
 urlpatterns = [
     path('proxy/flightSearch/', ListView.as_view()),

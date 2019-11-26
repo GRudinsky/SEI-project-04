@@ -6,6 +6,8 @@ import FlightSearchBar from './FlightSearchBar'
 import ResultsCard from './ResultsCard'
 import FlightSuggestions from './FlightSuggestions'
 import '@lls/react-light-calendar/dist/index.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 class Home extends React.Component {
   constructor() {
@@ -13,7 +15,7 @@ class Home extends React.Component {
     this.state = {
       flightResults: null,
       loading: false,
-      defaultOrigin: 'LON', // for flight suggestions
+      defaultOrigin: 'BER', // for flight suggestions
       fakeFlighData: {
         flyFrom: 'VNO',
         flyTo: 'NGO',
@@ -81,7 +83,6 @@ class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleDepartureCalendar = this.toggleDepartureCalendar.bind(this)
     this.toggleReturnCalendar = this.toggleReturnCalendar.bind(this)
-    // this.closeCalendar = this.closeCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
   }
@@ -155,18 +156,18 @@ class Home extends React.Component {
     console.log('state', this.state)
     return (
       <section>
-        <div className="navbar flex-row space-between">
+        <div className="navbar tenth-screen-high flex-row space-between">
           <div>
-            <img className="logo" src="https://image.flaticon.com/icons/svg/68/68380.svg"></img>
+            <h5 className="logo without-margin bold-font">find_That_flight <FontAwesomeIcon icon={faPaperPlane} /></h5>
             {this.state.searches && (
-              <p className="small-text">{this.state.searches.length} searches and counting</p>
+              <p className="small-text without-margin">{this.state.searches.length} searches and counting</p>
             )}
           </div>
           <RegionalSettings 
             handleChange = {handleChange}
           />
         </div>
-        <div className="search-bar with-shadow half-high flex-column centered">
+        <div className="search-bar with-shadow quarter-screen-high flex-column centered">
           <FlightSearchBar 
             {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState }}
           />
@@ -191,11 +192,13 @@ class Home extends React.Component {
               currency = {this.state.flightResults.currency}/>
           ))}
         </div>
-        {(!this.state.flightResults && !this.state.loading) &&
+        <div className="flex-column centered">
+          {(!this.state.flightResults && !this.state.loading) &&
           <FlightSuggestions 
             defaultOrigin={defaultOrigin}
             searchData={searchData}
           />}
+        </div>
       </section>
     )
   }

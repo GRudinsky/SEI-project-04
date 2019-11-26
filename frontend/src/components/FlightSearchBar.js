@@ -6,21 +6,19 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
   return (
     <form className="container" value="form" onSubmit={handleSubmit} >
       <div className="flex-row">
-        <div className="half-parent-wide">
+        <div className="quarter-parent-wide">
           <LocationSearch 
             handleChange={handleChange}
             divTitle="origin"
           />
         </div>
-        <div className="half-parent-wide">
+        <div className="quarter-parent-wide">
           <LocationSearch
             handleChange={handleChange}
             divTitle="destination"
           />
         </div>
-      </div>
-      <div className="flex-row">
-        <div className="half-parent-wide">
+        <div className="quarter-parent-wide">
           <div 
             title="departureDate" 
             className="card full-parent-wide"
@@ -36,7 +34,7 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
                   disableDates={date => date < new Date() - 86400000}
                 />}
         </div>
-        <div className="half-parent-wide">
+        <div className="quarter-parent-wide">
           <div
             title="returntureDate"
             className="card without-margin full-parent-wide"

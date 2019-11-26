@@ -1,7 +1,7 @@
 import React from 'react'
 
 const RegionalSettings = ({ handleChange }) => (
-  <form className="flex-row flex-end">
+  <form className="flex-row flex-end without-margin">
     <select onChange={handleChange} name="currency">
       <option value="" disabled>Currency</option>
       <option value="EUR">EUR - €</option>
