@@ -38,9 +38,10 @@ class SuggestionsCard extends React.Component {
     // console.log('state', this.state)
     // if (!duration) return null
     return (
-      <div className="card with-shadow thirty-percent-wide margin-width-1v">
+      <div id={this.getHoursOnly(duration)} className="card with-shadow thirty-percent-wide margin-width-1v margin-height-1v" 
+        onClick={this.props.getMoreSuggestions}>
         <div>
-          Up to {this.getHoursOnly(duration)} hours away:
+          {this.getHoursOnly(duration)} {this.getHoursOnly(duration) === 1 ? 'hour' : 'hours'} away:
         </div>
         <div>
           <img className="image-tile suggestion-card-image with-shadow full-parent-wide" src={this.state.backgroundImage}></img>

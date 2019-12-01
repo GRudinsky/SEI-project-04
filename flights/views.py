@@ -62,7 +62,7 @@ class CityDetailView(APIView):
         r = requests.get(url)
         data = r.json()
         # print(data["locations"][0]["name"])
-        return Response(data["locations"][0]["name"], status=status.HTTP_200_OK)
+        return Response(data["locations"], status=status.HTTP_200_OK)
 
 class SearchListView(APIView):
     def get(self, _request): # method to handle GET requests to the list view, the INDEX

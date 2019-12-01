@@ -10,6 +10,12 @@ $muli-font: 'Muli', sans-serif;
 * {
   font-family: $muli-font;
 }
+.marker {
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  border-radius: 3px;
+}
 
 .small-text {
   font-size: 12px;
@@ -31,8 +37,8 @@ $muli-font: 'Muli', sans-serif;
 .search-bar {
   background-color: $base-blue;
   height: 50vh;
-  // background-image: url("https://www.smartertravel.com/uploads/2017/01/Airplane-Landing-Sunset-1400x500.jpg");
-  // background-size: cover;
+  // background-image: url('https://i.ibb.co/QmDnZdS/DSC048451111112.jpg');
+  background-size: cover;
 }
 .image-tile {
   height: 200px;
@@ -45,8 +51,8 @@ $muli-font: 'Muli', sans-serif;
   margin-right: 1vw;
 }
 .margin-height-1v {
-  margin-top: 1vh;
-  margin-bottom: 1vh;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 .padding-5px {
   padding: 5px;
@@ -97,6 +103,9 @@ $muli-font: 'Muli', sans-serif;
 border: 1px solid $base-borders;
 border-radius: 4px;
 background: white;
+}
+.card:hover {
+  transform:scale(1.05);
 }
 
 .with-shadow {

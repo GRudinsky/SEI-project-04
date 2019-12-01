@@ -15,7 +15,7 @@ class Home extends React.Component {
     this.state = {
       flightResults: null,
       loading: false,
-      defaultOrigin: 'BER', // for flight suggestions
+      defaultOrigin: 'LON', // for flight suggestions
       fakeFlighData: {
         flyFrom: 'VNO',
         flyTo: 'NGO',
@@ -68,7 +68,7 @@ class Home extends React.Component {
       searchData: {
         user: 'undefined',
         currency: 'EUR',
-        origin: null
+        origin: 'LON'
       },
       departureCalendarActive: false,
       returnCalendarActive: false,
@@ -85,13 +85,25 @@ class Home extends React.Component {
     this.toggleReturnCalendar = this.toggleReturnCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
+    this.closeOnBlur = this.closeOnBlur.bind(this)
+    this.setStorage = this.setStorage.bind(this)
+    this.getStorage = this.getStorage.bind(this)
   }
   //form functions
   handleChange(e) {
     const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
     console.log('title', e.target.id)
     console.log(this.state.searchData)
-    this.setState({ searchData })
+    this.setState({ searchData }, this.setStorage(e))
+  }
+  setStorage(e) {
+    return e.target.name ? localStorage.setItem(e.target.name, e.target.value) : localStorage.setItem(e.target.title, e.target.id)
+  }
+  getStorage() {
+    const searchData = { ...this.state.searchData }
+    searchData.currency = localStorage.getItem('currency' || '')
+    searchData.origin = localStorage.getItem('origin' || '')
+    return this.setState({ searchData })
   }
   toggleLoadingScreen() {
     return this.setState({ loading: true })
@@ -122,17 +134,17 @@ class Home extends React.Component {
     const dateTo = this.getDate(endDate)
     this.setState({ startDate, endDate, dateFrom, dateTo }, () => {
       if (this.state.departureCalendarActive) {
-        this.setState({ returnDateLimit: startDate, searchData: { ...this.state.searchData, departureDate: dateFrom } })
+        this.setState({ returnDateLimit: startDate, searchData: { ...this.state.searchData, departureDate: dateFrom, returnDate: endDate < startDate && dateFrom }, departureCalendarActive: false, endDate: endDate < startDate && startDate  })
       } else {
-        this.setState({ searchData: { ...this.state.searchData, returnDate: dateFrom } })
+        this.setState({ searchData: { ...this.state.searchData, returnDate: dateFrom }, returnCalendarActive: false  })
       }
     })
   }
   toggleDepartureCalendar(e) {
-    !this.state.departureCalendarActive ? this.setState({ departureCalendarActive: true, departureDate: null, returnCalendarActive: false }, this.resetDepartureDate()) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
+    !this.state.departureCalendarActive ? this.setState({ departureCalendarActive: true, startDate: null, returnCalendarActive: false }, this.resetDepartureDate()) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
   }
   toggleReturnCalendar(e) {
-    !this.state.returnCalendarActive ? this.setState({ departureCalendarActive: false, returnCalendarActive: true }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
+    !this.state.returnCalendarActive ? this.setState({ departureCalendarActive: false, returnCalendarActive: true, endDate: null }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
   }
   resetDepartureDate() {
     this.setState({ ...this.state.searchData, departureDate: null })
@@ -143,16 +155,21 @@ class Home extends React.Component {
     console.log(e.target.id)
     this.state.flightOnMap !== e.target.id ? this.setState({ flightOnMap: e.target.id }) : this.setState({ flightOnMap: '' })
   }
+  closeOnBlur(e) {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      console.log(e.relatedTarget)
+    }
+  }
 
   componentDidMount() {
     axios.get('api/searches')
-      .then(res => this.setState({ searches: res.data }))
+      .then(res => this.setState({ searches: res.data }), this.getStorage())
       .catch(err => console.log(err))
   }
 
   render() {
-    const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, fakeFlighData, flightOnMap, defaultOrigin, clearLocationState } = this.state
-    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, closeCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations } = this
+    const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnDateLimit, returnCalendarActive, fakeFlighData, flightOnMap, clearLocationState } = this.state
+    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, closeCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations, closeOnBlur } = this
     console.log('state', this.state)
     return (
       <section>
@@ -165,13 +182,14 @@ class Home extends React.Component {
           </div>
           <RegionalSettings 
             handleChange = {handleChange}
+            currency = {searchData.currency}
           />
         </div>
-        <div className="search-bar with-shadow quarter-screen-high flex-column centered">
-          <FlightSearchBar 
-            {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState }}
-          />
-        </div>
+        
+        <FlightSearchBar 
+          {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState, closeOnBlur }}
+        />
+  
         <div className="flex-column centered">
           {/* <ResultsCard
             flyFrom = {fakeFlighData.flyFrom}
@@ -195,7 +213,6 @@ class Home extends React.Component {
         <div className="flex-column centered">
           {(!this.state.flightResults && !this.state.loading) &&
           <FlightSuggestions 
-            defaultOrigin={defaultOrigin}
             searchData={searchData}
           />}
         </div>

@@ -48,7 +48,7 @@ class LocationSearch extends React.Component {
   render () {
     console.log(this.state)
     const { dropdownActive, locationSuggestions, searchFieldValue } = this.state
-    const { suggestLocations, openDropdown, setLocation, deleteLocation } = this
+    const { suggestLocations, openDropdown, setLocation, deleteLocation, closeOnBlur } = this
    
     return (
       <>

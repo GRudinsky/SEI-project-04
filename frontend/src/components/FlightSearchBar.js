@@ -2,59 +2,64 @@ import React from 'react'
 import LocationSearch from './LocationSearch'
 import Calendar from './Calendar'
 
-const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }) => {
+const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
   return (
-    <form className="container" value="form" onSubmit={handleSubmit} >
-      <div className="flex-row">
-        <div className="quarter-parent-wide">
-          <LocationSearch 
-            handleChange={handleChange}
-            divTitle="origin"
-          />
-        </div>
-        <div className="quarter-parent-wide">
-          <LocationSearch
-            handleChange={handleChange}
-            divTitle="destination"
-          />
-        </div>
-        <div className="quarter-parent-wide">
-          <div 
-            title="departureDate" 
-            className="card full-parent-wide"
-            id={searchData.departureDate} 
-            onChange={handleChange}
-            onClick={toggleDepartureCalendar} 
-          >
-            <p className="input-text base-color">{searchData.departureDate ? searchData.departureDate : 'Departure From Date'}</p>
+    <div className="search-bar with-shadow quarter-screen-high flex-column centered" >
+      <form className="container" value="form" onSubmit={handleSubmit} >
+        <div className="flex-row">
+          <div className="quarter-parent-wide">
+            <LocationSearch 
+              handleChange={handleChange}
+              closeOnBlur={closeOnBlur}
+              divTitle="origin"
+            />
           </div>
-          {departureCalendarActive &&
+          <div className="quarter-parent-wide">
+            <LocationSearch
+              handleChange={handleChange}
+              closeOnBlur={closeOnBlur}
+              divTitle="destination"
+            />
+          </div>
+          <div className="quarter-parent-wide">
+            <div 
+              title="departureDate" 
+              className="card full-parent-wide"
+              id={searchData.departureDate} 
+              onChange={handleChange}
+              onClick={toggleDepartureCalendar} 
+            >
+              <p className="input-text base-color">{searchData.departureDate ? searchData.departureDate : 'Date From'}</p>
+            </div>
+            {departureCalendarActive &&
                 <Calendar
                   {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar }}
                   disableDates={date => date < new Date() - 86400000}
                 />}
-        </div>
-        <div className="quarter-parent-wide">
-          <div
-            title="returntureDate"
-            className="card without-margin full-parent-wide"
-            id={searchData.returnDate}
-            onChange={handleChange}
-            onClick={toggleReturnCalendar}
-          >
-            <p className="input-text base-color">{searchData.returnDate ? searchData.returnDate : 'Departure To Date:'}</p>
           </div>
-          {returnCalendarActive &&
+          <div className="quarter-parent-wide">
+            <div
+              title="returntureDate"
+              className="card without-margin full-parent-wide"
+              id={searchData.returnDate}
+              onChange={handleChange}
+              onClick={toggleReturnCalendar}
+            >
+              <p className="input-text base-color">{searchData.returnDate ? searchData.returnDate : 'Date To'}</p>
+            </div>
+            {returnCalendarActive &&
                 <Calendar
-                  {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive }}
+                  {...{ handleDateChange, departureCalendarActive, returnCalendarActive }}
                   disableDates={date => date < returnDateLimit}
+                  startDate={endDate}
                 />}
+          </div>
         </div>
-      </div>
-      <div className="button button-primary" onClick={handleSubmit}>
+        <div className="button button-primary" onClick={handleSubmit}>
             Submit
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   )
 }
 
