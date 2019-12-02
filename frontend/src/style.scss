@@ -16,6 +16,9 @@ $muli-font: 'Muli', sans-serif;
   background-color: red;
   border-radius: 3px;
 }
+.map-popup:hover {
+  transform:scale(1.1);
+}
 
 .small-text {
   font-size: 12px;

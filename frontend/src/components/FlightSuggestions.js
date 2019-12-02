@@ -98,7 +98,7 @@ class FlightSuggestions extends React.Component {
   }
   fitToBounds() { // this is currently being managed in Mapio.js
     const { longitude, latitude, zoom } = new WebMercatorViewport({ 
-      width: 800,
+      width: 680,
       height: 400,
       latitude: 50,
       longitude: 10,
@@ -137,12 +137,10 @@ class FlightSuggestions extends React.Component {
             <h4 className = "bold-font without-margin">Other destinations {this.state.hoursOnFilter} hours away:</h4>
             <Map
               data = {suggestionsByHour}
-              // lat={this.state.suggestionResults.data[0].route[0].latFrom}
-              // lng={this.state.suggestionResults.data[0].route[0].lngFrom}
               bounds={this.getMapBounds()}
               lng={this.fitToBounds()[0]}
               lat={this.fitToBounds()[1]}
-              zoom={this.fitToBounds()[2]}
+              zoom={this.fitToBounds()[2] < 6 ? this.fitToBounds()[2] - 0.1 : 6} // if one result, setting max-zoom to 6 to avoid over-magnifying, if more results, adding padding by reducing zoom by 0.1
             />
           </div>
         }
