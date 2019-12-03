@@ -16,8 +16,15 @@ $muli-font: 'Muli', sans-serif;
   background-color: red;
   border-radius: 3px;
 }
-.map-popup:hover {
-  transform:scale(1.1);
+.popup:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.mapboxgl-popup-content:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .small-text {
@@ -39,12 +46,24 @@ $muli-font: 'Muli', sans-serif;
 }
 .search-bar {
   background-color: $base-blue;
-  height: 50vh;
+  // height: 50vh;
   // background-image: url('https://i.ibb.co/QmDnZdS/DSC048451111112.jpg');
   background-size: cover;
 }
+.full-height {
+  min-height: 100vh;
+}
+.footer {
+  width: 100%;
+  bottom: 0;
+  background-color: $base-blue;
+  margin-top: 2vh;
+}
 .image-tile {
   height: 200px;
+}
+.without-border {
+  border: none;
 }
 .without-margin {
   margin: 0;
@@ -54,8 +73,8 @@ $muli-font: 'Muli', sans-serif;
   margin-right: 1vw;
 }
 .margin-height-1v {
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 .padding-5px {
   padding: 5px;
@@ -68,6 +87,14 @@ $muli-font: 'Muli', sans-serif;
   background-color: white;
 }
 //flexbox
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box }
+
 .flex-column {
   display: flex;
   flex-direction: column;
@@ -75,11 +102,12 @@ $muli-font: 'Muli', sans-serif;
 
 .flex-row {
   display: flex;
+  flex-direction: row;
 }
 
 .flex-end {
   justify-content: flex-end;
-  align-items: flex-end; 
+  // align-items: flex-end; 
 }
 .space-around{
   justify-content: space-around;
@@ -108,7 +136,8 @@ border-radius: 4px;
 background: white;
 }
 .card:hover {
-  transform:scale(1.05);
+  transform:scale(1.025);
+  cursor: pointer;
 }
 
 .with-shadow {

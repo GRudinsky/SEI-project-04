@@ -28,6 +28,7 @@ class FlightSuggestions extends React.Component {
 
   getFlightDate() {
     const time = new Date()
+    localStorage.getItem
     console.log('time', time.getMonth() + 1 + this.monthsAhead)
     return `${time.getDate()}/${time.getMonth() + 1 + this.monthsAhead <= 12 ? time.getMonth() + 1 + this.monthsAhead : this.monthsAhead}/${time.getMonth() + 1 + this.monthsAhead <= 12 ? time.getFullYear() : time.getFullYear() + 1}`
   }
@@ -58,9 +59,10 @@ class FlightSuggestions extends React.Component {
   getSuggestions() {
     const currency = localStorage.getItem('currency' || '')
     const origin = localStorage.getItem('origin' || '')
+    const date = localStorage.getItem('departureDate' || '')
     const obj = { 
       'origin': origin,
-      'date': this.getFlightDate(),
+      'date': date ? date : this.getFlightDate(),
       'currency': currency
     } // getting cheapest direct flight suggestions from origin to all destinations in number of months that equals to this.monthsAhead value.
     axios.post('/api/proxy/flightSuggestions/', obj)
@@ -71,7 +73,8 @@ class FlightSuggestions extends React.Component {
     // const searchData = { ...this.state.searchData }
     const currency = localStorage.getItem('currency' || '')
     const origin = localStorage.getItem('origin' || '')
-    return this.setState({ currency, origin }, this.getSuggestions())
+    const departureDate = localStorage.getItem('departureDate' || '')
+    return this.setState({ currency, origin, departureDate }, this.getSuggestions())
   }
 
   findLocalCity() {
@@ -116,7 +119,7 @@ class FlightSuggestions extends React.Component {
     suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
     return (
       <div className="container">
-        <h4 className="bold-font without-margin">Fly from {this.state.localCity} in {this.monthsAhead} months time:</h4>
+        <h4 className="bold-font">Fly from {this.state.localCity} in {this.monthsAhead} months time:</h4>
         <div className="flex-row space-between with-scroll">
           {suggestionsByDurations.filter(flight => flight !== undefined)
             .map(flight => (
@@ -134,8 +137,10 @@ class FlightSuggestions extends React.Component {
         </div>
         {this.state.hourlySuggestionsBarActive &&
           <div>
-            <h4 className = "bold-font without-margin">Other destinations {this.state.hoursOnFilter} hours away:</h4>
+            <h4 className = "bold-font">All destinations {this.state.hoursOnFilter} hours away:</h4>
             <Map
+              handleChange={this.props.handleChange}
+              searchFromMap={this.props.searchFromMap}
               data = {suggestionsByHour}
               bounds={this.getMapBounds()}
               lng={this.fitToBounds()[0]}

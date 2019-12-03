@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import RegionalSettings from './RegionalSettings'
+import CurrencySelector from './CurrencySelector'
 import LoadingScreen from './Common/LoadingScreen'
 import FlightSearchBar from './FlightSearchBar'
 import ResultsCard from './ResultsCard'
@@ -81,6 +81,7 @@ class Home extends React.Component {
     this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.searchFromMap = this.searchFromMap.bind(this)
     this.toggleDepartureCalendar = this.toggleDepartureCalendar.bind(this)
     this.toggleReturnCalendar = this.toggleReturnCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
@@ -108,8 +109,13 @@ class Home extends React.Component {
   toggleLoadingScreen() {
     return this.setState({ loading: true })
   }
-
-  handleSubmit(e) {
+  searchFromMap() {
+    const searchData = this.state.searchData
+    searchData.departureDate = searchData.departureDate ? searchData.departureDate : localStorage.getItem('departureDate')
+    searchData.returnDate = searchData.returnDate ? searchData.returnDate : searchData.departureDate
+    this.setState({ searchData }, this.handleSubmit())
+  }
+  handleSubmit() {
     // e.prevetDefault()
     this.toggleLoadingScreen()
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
@@ -134,7 +140,7 @@ class Home extends React.Component {
     const dateTo = this.getDate(endDate)
     this.setState({ startDate, endDate, dateFrom, dateTo }, () => {
       if (this.state.departureCalendarActive) {
-        this.setState({ returnDateLimit: startDate, searchData: { ...this.state.searchData, departureDate: dateFrom, returnDate: endDate < startDate && dateFrom }, departureCalendarActive: false, endDate: endDate < startDate && startDate  })
+        this.setState({ returnDateLimit: startDate, searchData: { ...this.state.searchData, departureDate: dateFrom, returnDate: endDate < startDate && dateFrom }, departureCalendarActive: false, endDate: endDate < startDate && startDate }, localStorage.setItem('departureDate', dateFrom))
       } else {
         this.setState({ searchData: { ...this.state.searchData, returnDate: dateFrom }, returnCalendarActive: false  })
       }
@@ -172,20 +178,21 @@ class Home extends React.Component {
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, closeCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations, closeOnBlur } = this
     console.log('state', this.state)
     return (
-      <section>
-        <div className="navbar tenth-screen-high flex-row space-between">
-          <div>
+      <section className="flex-column space-between full-height">
+        <header className="navbar tenth-screen-high flex-row space-between">
+          <div className="margin-width-1v">
             <h5 className="logo without-margin bold-font">find_That_flight <FontAwesomeIcon icon={faPaperPlane} /></h5>
             {this.state.searches && (
               <p className="small-text without-margin">{this.state.searches.length} searches and counting</p>
             )}
           </div>
-          <RegionalSettings 
-            handleChange = {handleChange}
-            currency = {searchData.currency}
-          />
-        </div>
-        
+          <div className="flex-column centered margin-width-1v">
+            <CurrencySelector 
+              handleChange = {handleChange}
+              currency = {searchData.currency}
+            />
+          </div>
+        </header>
         <FlightSearchBar 
           {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState, closeOnBlur }}
         />
@@ -213,9 +220,16 @@ class Home extends React.Component {
         <div className="flex-column centered">
           {(!this.state.flightResults && !this.state.loading) &&
           <FlightSuggestions 
+            handleChange={handleChange}
+            searchFromMap={this.searchFromMap}
             searchData={searchData}
           />}
         </div>
+        <footer className="footer with-shadow tenth-screen-high flex-row flex-end">
+          <div className="flex-column centered margin-width-1v">
+            <p className="small-text without-margin ">GRudinsky 2019</p>
+          </div>
+        </footer>
       </section>
     )
   }

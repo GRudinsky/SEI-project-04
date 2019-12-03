@@ -12,7 +12,7 @@ const getTime = (value) => {
   return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-const ResultsCard = ( { ...flight }, { currency } ) => (
+const ResultsCard = ( { ...flight }) => (
   <div className="card with-shadow flex-row centered half-screen-wide quarter-screen-high margin-height-1v" key={flight.id}>
     <div className="flex-column centered quarter-parent-wide">
       <span className="small-text">Layovers:{flight.route.length - 1}</span>

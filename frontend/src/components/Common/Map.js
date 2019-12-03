@@ -5,7 +5,7 @@ import axios from 'axios'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 
-class Map extends React.Component {
+export default class Map extends React.Component {
   constructor({ ...props }) {
     super({ props })
     this.state = {
@@ -19,7 +19,8 @@ class Map extends React.Component {
         pitch: 0
       }
     }
-    this.displayImage = this.displayImage.bind(this)
+    this.getPopupValue = this.getPopupValue.bind(this)
+    this.clearPopupValue = this.clearPopupValue.bind(this)
   }
 
   flyToBoundaries() {
@@ -41,26 +42,30 @@ class Map extends React.Component {
       this.flyToBoundaries()
     }
   }
-  getImage(value) {
+  getImage(value) { // to be deleted if not displaying imamges on popup hover
     const obj = { 'searchString': value }
     axios.post('/api/proxy/imageSearch/', obj)
       .then(res => this.setState({ popupImage: res.data.hits[Math.floor(Math.random() * res.data.hits.length)].webformatURL }))
       .catch(err => console.log('errors', err))
   }
-  displayImage(e) {
-    console.log('popup value', e.target.id)
-    this.getImage(e.target.id)
+  getPopupValue(e) {
+    // console.log('popup id', e.target.id)
+    this.setState({ cityOnPopup: e.target.id }, this.props.handleChange(e) )
   }
+  clearPopupValue() {
+    this.setState({ cityOnPopup: null })
+  }
+
 
   render() {
     const { data, lat, lng, bounds } = this.props
-    console.log(this.state)
+    console.log(data)
     return (
       <div>
         <div className="flex-row centered with-shadow">
           <ReactMapGL
             mapboxApiAccessToken={process.env.MAPBOX_ACCESS_TOKEN}
-            mapStyle="mapbox://styles/mapbox/streets-v10"
+            mapStyle="mapbox://styles/mapbox/outdoors-v10"
             {...this.state.viewport}
             onViewportChange={(viewport) => this.setState({ viewport })}
             renderChildrenInPortal={true}
@@ -98,15 +103,20 @@ class Map extends React.Component {
                 closeButton={false}
                 // anchor="top"
                 sortByDepth={true}
-                className="map-popup"
                 captureClick={true}
               >
-                <div 
-                  id={point.cityTo}
+                <div
+                  title="destination"
+                  id={point.cityCodeTo}
                   className="small-text without-margin"
-                  onMouseEnter={this.displayImage}
+                  onMouseEnter={this.getPopupValue}
+                  onMouseLeave={this.clearPopupValue}
+                  onClick={this.props.searchFromMap}
                 >
-                  {point.cityTo}, {point.price}{Object.keys(point.conversion)[0]}</div>
+                  {/* {point.cityTo}, {point.price}{Object.keys(point.conversion)[0]} */}
+                  {this.state.cityOnPopup === point.cityCodeTo ? `Find Flights to ${point.cityTo}` : `${point.cityTo}, ${point.price}${Object.keys(point.conversion)[0]}`} 
+                    
+                </div>
                 {/* <img className="image-tile suggestion-card-image with-shadow quarter-parent-wide without-margin" src={this.state.popupImage && this.state.popupImage}></img> */}
               </Popup>))}
           </ReactMapGL>
@@ -115,4 +125,3 @@ class Map extends React.Component {
     )
   }
 }
-export default Map
