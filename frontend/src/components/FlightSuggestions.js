@@ -7,13 +7,11 @@ import WebMercatorViewport from 'viewport-mercator-project'
 const suggestionsByDurations = [] // this array fills with flight data as soon ascomponent mounts
 let suggestionsByHour = []
 
-class FlightSuggestions extends React.Component {
+export default class FlightSuggestions extends React.Component {
   constructor() {
     super()
     this.state = {
-      suggestionResults: null, 
-      currency: 'EUR',
-      origin: 'LON'
+      suggestionResults: null 
     }
     this.flightDurations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
     this.monthsAhead = 1
@@ -23,14 +21,6 @@ class FlightSuggestions extends React.Component {
 
   componentDidMount() {
     this.getStorage()
- 
-  }
-
-  getFlightDate() {
-    const time = new Date()
-    localStorage.getItem
-    console.log('time', time.getMonth() + 1 + this.monthsAhead)
-    return `${time.getDate()}/${time.getMonth() + 1 + this.monthsAhead <= 12 ? time.getMonth() + 1 + this.monthsAhead : this.monthsAhead}/${time.getMonth() + 1 + this.monthsAhead <= 12 ? time.getFullYear() : time.getFullYear() + 1}`
   }
 
   getTime(value) {
@@ -57,16 +47,16 @@ class FlightSuggestions extends React.Component {
     suggestionsByHour = this.state.suggestionResults.data.filter(flight => this.getHoursOnly(flight.duration.total) === (parseInt(arg) - 1))
   }
   getSuggestions() {
-    const currency = localStorage.getItem('currency' || '')
-    const origin = localStorage.getItem('origin' || '')
-    const date = localStorage.getItem('departureDate' || '')
+    const currency = localStorage.getItem('currency') || this.props.suggestionsData.defaultCurrency
+    const origin = localStorage.getItem('origin') || this.props.suggestionsData.defaultOrigin
+    const date = localStorage.getItem('departureDate') || this.props.defaultDate
     const obj = { 
       'origin': origin,
-      'date': date ? date : this.getFlightDate(),
+      'date': date,
       'currency': currency
     } // getting cheapest direct flight suggestions from origin to all destinations in number of months that equals to this.monthsAhead value.
     axios.post('/api/proxy/flightSuggestions/', obj)
-      .then(res => this.setState({ suggestionResults: res.data, currency, origin }, this.findLocalCity()))
+      .then(res => this.setState({ suggestionResults: res.data, currency, origin, date }, this.findOrigin()))
       .catch(err => console.log('errors', err))
   }
   getStorage() {
@@ -77,12 +67,12 @@ class FlightSuggestions extends React.Component {
     return this.setState({ currency, origin, departureDate }, this.getSuggestions())
   }
 
-  findLocalCity() {
+  findOrigin() {
     const obj = { 'searchString': this.state.origin }
-    console.log(obj)
+    // console.log(obj)
     axios.post('/api/proxy/locationSuggestions/', obj)
-      // .then(res => res.data.locations[0].type === 'airport' ? this.setState({ localCity: (res.data.locations[0].city.name) }, this.getDurationsAndFlights()) : this.setState({ localCity: (res.data.locations[0].name) }, this.getDurationsAndFlights()))
-      .then(res => this.setState({ localCity: res.data.locations[0].type === 'airport' ? res.data.locations[0].city.name : res.data.locations[0].name }, this.getDurationsAndFlights()))
+      // .then(res => res.data.locations[0].type === 'airport' ? this.setState({ origin: (res.data.locations[0].city.name) }, this.getDurationsAndFlights()) : this.setState({ origin: (res.data.locations[0].name) }, this.getDurationsAndFlights()))
+      .then(res => this.setState({ origin: res.data.locations[0].type === 'airport' ? res.data.locations[0].city.name : res.data.locations[0].name }, this.getDurationsAndFlights()))
       // .then(res => console.log('suggestions', res))
       .catch(err => console.log('errors', err))
   }
@@ -99,7 +89,7 @@ class FlightSuggestions extends React.Component {
     const bounds = [sw, ne]
     return bounds
   }
-  fitToBounds() { // this is currently being managed in Mapio.js
+  fitToBounds() {
     const { longitude, latitude, zoom } = new WebMercatorViewport({ 
       width: 680,
       height: 400,
@@ -110,16 +100,21 @@ class FlightSuggestions extends React.Component {
       pitch: 0
     }).fitBounds(this.getMapBounds())
     // .fitBounds(this.props.bounds, { padding: { top: 82, bottom: 30, left: leftPadding, right: 30 } })
-    console.log(longitude, latitude, zoom)
+    // console.log(longitude, latitude, zoom)
     return [longitude, latitude, zoom]
   }
-
+  getSuggestionsText() {
+    if (localStorage.getItem('departureDate')) {
+      return `Still interested in flights from ${this.state.origin} on ${this.state.date }?` 
+    }
+    return `Cheapest destinations from ${this.state.origin} in ${this.props.suggestionsData.defaultWeeksAhead} weeks time`
+  }
   render() {
     if (!this.state.suggestionResults) return null
     suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
     return (
       <div className="container">
-        <h4 className="bold-font">Fly from {this.state.localCity} in {this.monthsAhead} months time:</h4>
+        <h4 className="bold-font">{this.getSuggestionsText()}</h4>
         <div className="flex-row space-between with-scroll">
           {suggestionsByDurations.filter(flight => flight !== undefined)
             .map(flight => (
@@ -153,6 +148,3 @@ class FlightSuggestions extends React.Component {
     )
   }
 }
-
-
-export default FlightSuggestions

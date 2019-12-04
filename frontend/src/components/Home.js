@@ -3,19 +3,19 @@ import axios from 'axios'
 import CurrencySelector from './CurrencySelector'
 import LoadingScreen from './Common/LoadingScreen'
 import FlightSearchBar from './FlightSearchBar'
+import SearchResults from './SearchResults'
 import ResultsCard from './ResultsCard'
 import FlightSuggestions from './FlightSuggestions'
 import '@lls/react-light-calendar/dist/index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
-class Home extends React.Component {
+export default class Home extends React.Component {
   constructor() {
     super()
     this.state = {
       flightResults: null,
       loading: false,
-      defaultOrigin: 'LON', // for flight suggestions
       fakeFlighData: {
         flyFrom: 'VNO',
         flyTo: 'NGO',
@@ -77,6 +77,11 @@ class Home extends React.Component {
       returnDateLimit: null,
       dateFrom: null,
       dateTo: null
+    },
+    this.suggestionsData =  {
+      defaultOrigin: 'LON',
+      defaultCurrency: 'EUR',
+      defaultWeeksAhead: 2
     }
     this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
@@ -93,8 +98,7 @@ class Home extends React.Component {
   //form functions
   handleChange(e) {
     const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
-    console.log('title', e.target.id)
-    console.log(this.state.searchData)
+    // console.log('title', e.target.id)
     this.setState({ searchData }, this.setStorage(e))
   }
   setStorage(e) {
@@ -111,8 +115,10 @@ class Home extends React.Component {
   }
   searchFromMap() {
     const searchData = this.state.searchData
-    searchData.departureDate = searchData.departureDate ? searchData.departureDate : localStorage.getItem('departureDate')
-    searchData.returnDate = searchData.returnDate ? searchData.returnDate : searchData.departureDate
+    searchData.currency = localStorage.getItem('currency') ? localStorage.getItem('currency') : this.suggestionsData.defaultCurrency
+    searchData.origin = localStorage.getItem('origin') ? localStorage.getItem('origin') : this.suggestionsData.defaultOrigin
+    searchData.departureDate = localStorage.getItem('departureDate') ? localStorage.getItem('departureDate') : this.getDateFromWeeksAhead(this.suggestionsData.defaultWeeksAhead)
+    searchData.returnDate = searchData.departureDate
     this.setState({ searchData }, this.handleSubmit())
   }
   handleSubmit() {
@@ -134,6 +140,10 @@ class Home extends React.Component {
   getTime(value) {
     const time = new Date(value)
     return `${time.getHours()}:${time.getMinutes()}`
+  }
+  getDateFromWeeksAhead(arg) {
+    const time = new Date(Number(new Date) + arg * 7 * 86400000)
+    return `${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`
   }
   handleDateChange(startDate, endDate) {
     const dateFrom = this.getDate(startDate)
@@ -209,20 +219,21 @@ class Home extends React.Component {
             dTime={fakeFlighData.dTime}
             aTime={fakeFlighData.aTime}
           /> */}
-          {this.state.loading && <LoadingScreen 
+          {this.state.loading && 
+          <LoadingScreen 
             message = {this.loadingMessage}/>}
-          {this.state.flightResults && this.state.flightResults.data.map(flight => (
-            <ResultsCard key={flight.id}
-              {...flight}
-              currency = {this.state.flightResults.currency}/>
-          ))}
+          {this.state.flightResults && 
+          <SearchResults 
+            flightResults = {this.state.flightResults}/>}          
         </div>
         <div className="flex-column centered">
           {(!this.state.flightResults && !this.state.loading) &&
           <FlightSuggestions 
             handleChange={handleChange}
             searchFromMap={this.searchFromMap}
+            suggestionsData={this.suggestionsData}
             searchData={searchData}
+            defaultDate={this.getDateFromWeeksAhead(this.suggestionsData.defaultWeeksAhead)}
           />}
         </div>
         <footer className="footer with-shadow tenth-screen-high flex-row flex-end">
@@ -234,5 +245,4 @@ class Home extends React.Component {
     )
   }
 }
-export default Home
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-class SuggestionsCard extends React.Component {
+export default class SuggestionsCard extends React.Component {
   constructor({ price, duration, conversion, cityTo }) {
     super(price, duration, conversion, cityTo)
     this.state = {
@@ -52,4 +52,3 @@ class SuggestionsCard extends React.Component {
     )
   }
 }
-export default SuggestionsCard

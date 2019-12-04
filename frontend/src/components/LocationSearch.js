@@ -3,7 +3,7 @@ import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCity, faPlaneDeparture, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons'
 
-class LocationSearch extends React.Component {
+export default class LocationSearch extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -46,7 +46,7 @@ class LocationSearch extends React.Component {
 
 
   render () {
-    console.log(this.state)
+    // console.log(this.state)
     const { dropdownActive, locationSuggestions, searchFieldValue } = this.state
     const { suggestLocations, openDropdown, setLocation, deleteLocation, closeOnBlur } = this
    
@@ -81,5 +81,3 @@ class LocationSearch extends React.Component {
     )
   }
 }
-
-export default LocationSearch
