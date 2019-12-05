@@ -4,7 +4,7 @@ import SuggestionsCard from './SuggestionsCard'
 import Map from './Common/Map'
 import WebMercatorViewport from 'viewport-mercator-project'
 
-const suggestionsByDurations = [] // this array fills with flight data as soon ascomponent mounts
+const suggestionsByDurations = [] // this array fills with flight data as soon as component mounts
 let suggestionsByHour = []
 
 export default class FlightSuggestions extends React.Component {
