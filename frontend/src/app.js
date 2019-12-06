@@ -11,6 +11,7 @@ import Home from './components/Home'
 const App = () => (
   <BrowserRouter>
     <Route exact path="/" component={Home} />
+    {/* <Route path="/search" component={SearchResults} /> */}
   </BrowserRouter>
 )
 

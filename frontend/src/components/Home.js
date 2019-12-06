@@ -1,10 +1,10 @@
 import React from 'react'
 import axios from 'axios'
+import { Link, withRouter } from 'react-router-dom'
 import CurrencySelector from './CurrencySelector'
 import LoadingScreen from './Common/LoadingScreen'
 import FlightSearchBar from './FlightSearchBar'
 import SearchResults from './SearchResults'
-import ResultsCard from './ResultsCard'
 import FlightSuggestions from './FlightSuggestions'
 import '@lls/react-light-calendar/dist/index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,55 +16,6 @@ export default class Home extends React.Component {
     this.state = {
       flightResults: null,
       loading: false,
-      fakeFlighData: {
-        flyFrom: 'VNO',
-        flyTo: 'NGO',
-        cityFrom: 'Vilnius',
-        cityTo: 'Nagoya',
-        price: 344,
-        fly_duration: '21h 0m',
-        dTime: 1574157600,
-        dTimeUTC: 1574150400,
-        aTime: 1574258400,
-        aTimeUTC: 1574226000,
-        pnr_count: 2,
-        route: [
-          {
-            id: '0c880ddc472b0000c919984d_0',
-            flyFrom: 'VNO',
-            flyTo: 'HEL',
-            airline: 'AY',
-            cityTo: 'Helsinki',
-            cityFrom: 'Vilnius',
-            latFrom: 54.634167,
-            lngFrom: 25.285833,
-            latTo: 52.165833,
-            lngTo: 20.967222 },
-          { 
-            id: '0c880ddc472b0000c919984d_1',
-            flyFrom: 'HEL',
-            flyTo: 'PVG', 
-            airline: 'HO',
-            cityTo: 'Shanghai',
-            cityFrom: 'Helsinki',
-            latFrom: 52.165833,
-            lngFrom: 20.967222,
-            latTo: 40.08,
-            lngTo: 116.584444  },
-          {
-            id: '0ddc14a2472c0000ec715d27_0',
-            flyFrom: 'PVG',
-            flyTo: 'NGO',
-            cityTo: 'Nagoya',
-            airline: 'HO',
-            cityFrom: 'Shanghai',
-            latFrom: 40.08,
-            lngFrom: 116.584444,
-            latTo: 38.965556,
-            lngTo: 121.538611
-          }
-        ]
-      },
       searchData: {
         user: 'undefined',
         currency: 'EUR',
@@ -76,29 +27,28 @@ export default class Home extends React.Component {
       endDate: null,
       returnDateLimit: null,
       dateFrom: null,
-      dateTo: null
+      dateTo: null,
+      loadingMessage: 'We are getting your flight...'
     },
     this.suggestionsData =  {
       defaultOrigin: 'LON',
       defaultCurrency: 'EUR',
       defaultWeeksAhead: 2
     }
-    this.loadingMessage = 'We are getting your flight..'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.searchFromMap = this.searchFromMap.bind(this)
     this.toggleDepartureCalendar = this.toggleDepartureCalendar.bind(this)
     this.toggleReturnCalendar = this.toggleReturnCalendar.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
-    this.toggleMapDropDown = this.toggleMapDropDown.bind(this)
     this.closeOnBlur = this.closeOnBlur.bind(this)
     this.setStorage = this.setStorage.bind(this)
     this.getStorage = this.getStorage.bind(this)
+    this.refreshPage = this.refreshPage.bind(this)
   }
   //form functions
   handleChange(e) {
     const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
-    // console.log('title', e.target.id)
     this.setState({ searchData }, this.setStorage(e))
   }
   setStorage(e) {
@@ -110,9 +60,7 @@ export default class Home extends React.Component {
     searchData.origin = localStorage.getItem('origin' || '')
     return this.setState({ searchData })
   }
-  toggleLoadingScreen() {
-    return this.setState({ loading: true })
-  }
+
   searchFromMap() {
     const searchData = this.state.searchData
     searchData.currency = localStorage.getItem('currency') ? localStorage.getItem('currency') : this.suggestionsData.defaultCurrency
@@ -123,10 +71,12 @@ export default class Home extends React.Component {
   }
   handleSubmit() {
     // e.prevetDefault()
-    this.toggleLoadingScreen()
+    this.setState({ flightResults: null, loading: true }, this.getFlightResults())
+  }
+  getFlightResults() {
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
       .then(res => this.setState({ flightResults: res.data, loading: false }), this.pushSearchtoDB())
-      .catch(err => console.log('errors', err))
+      .catch(err => this.setState({ errors: err.message, loadingMessage: 'Ooops, something went wrong...' }))
   }
   pushSearchtoDB(){
     axios.post('/api/searches', this.state.searchData)
@@ -156,42 +106,38 @@ export default class Home extends React.Component {
       }
     })
   }
-  toggleDepartureCalendar(e) {
+  toggleDepartureCalendar() {
     !this.state.departureCalendarActive ? this.setState({ departureCalendarActive: true, startDate: null, returnCalendarActive: false }, this.resetDepartureDate()) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
   }
-  toggleReturnCalendar(e) {
+  toggleReturnCalendar() {
     !this.state.returnCalendarActive ? this.setState({ departureCalendarActive: false, returnCalendarActive: true, endDate: null }) : this.setState({ departureCalendarActive: false, returnCalendarActive: false })
   }
   resetDepartureDate() {
     this.setState({ ...this.state.searchData, departureDate: null })
   }
 
-  // Map functions
-  toggleMapDropDown(e) {
-    console.log(e.target.id)
-    this.state.flightOnMap !== e.target.id ? this.setState({ flightOnMap: e.target.id }) : this.setState({ flightOnMap: '' })
-  }
   closeOnBlur(e) {
     if (!e.currentTarget.contains(e.relatedTarget)) {
-      console.log(e.relatedTarget)
+      console.log(e.relatedTarget, e.currentTarget)
     }
   }
-
+  refreshPage() {
+    window.location.reload(false)
+  } 
   componentDidMount() {
     axios.get('api/searches')
       .then(res => this.setState({ searches: res.data }), this.getStorage())
       .catch(err => console.log(err))
   }
-
   render() {
-    const { searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnDateLimit, returnCalendarActive, fakeFlighData, flightOnMap, clearLocationState } = this.state
-    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, closeCalendar, toggleMapDropDown, toggleLocationDropDown, closeLocationDropDown, suggestLocations, closeOnBlur } = this
+    const { searchData, startDate, endDate, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
+    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar } = this
     console.log('state', this.state)
     return (
       <section className="flex-column space-between full-height">
         <header className="navbar tenth-screen-high flex-row space-between">
-          <div className="margin-width-1v">
-            <h5 className="logo without-margin bold-font">find_That_flight <FontAwesomeIcon icon={faPaperPlane} /></h5>
+          <div className="logo margin-width-1v" onClick={this.refreshPage}>
+            <h5 className="without-margin bold-font italic-font">find_That_flight <FontAwesomeIcon icon={faPaperPlane} /></h5>
             {this.state.searches && (
               <p className="small-text without-margin">{this.state.searches.length} searches and counting</p>
             )}
@@ -204,24 +150,12 @@ export default class Home extends React.Component {
           </div>
         </header>
         <FlightSearchBar 
-          {...{ searchData, locationSuggestions, originDropDownActive, destinationDropDownActive, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, suggestLocations, toggleLocationDropDown, closeLocationDropDown, clearLocationState, closeOnBlur }}
+          {...{ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }}
         />
-  
-        <div className="flex-column centered">
-          {/* <ResultsCard
-            flyFrom = {fakeFlighData.flyFrom}
-            flyTo={fakeFlighData.flyTo}
-            price={fakeFlighData.price}
-            fly_duration={fakeFlighData.fly_duration}
-            cityFrom={fakeFlighData.cityFrom}
-            cityTo={fakeFlighData.cityTo}
-            route={fakeFlighData.route}
-            dTime={fakeFlighData.dTime}
-            aTime={fakeFlighData.aTime}
-          /> */}
-          {this.state.loading && 
+        <div className="flex-column centered full-parent-high">
+          {(this.state.loading || this.state.errors) && 
           <LoadingScreen 
-            message = {this.loadingMessage}/>}
+            message = {this.state.loadingMessage}/>}
           {this.state.flightResults && 
           <SearchResults 
             flightResults = {this.state.flightResults}/>}          

@@ -16,15 +16,12 @@ $muli-font: 'Muli', sans-serif;
   background-color: red;
   border-radius: 3px;
 }
-.popup:hover {
-  transform: scale(1.1);
-  cursor: pointer;
-}
 
 .mapboxgl-popup-content:hover {
   transform: scale(1.2);
   cursor: pointer;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
 }
 
 .small-text {
@@ -38,7 +35,7 @@ $muli-font: 'Muli', sans-serif;
 .base-color {
   color: $base-borders;
 }
-.logo {
+.italic-font {
   font-style: italic;
 }
 .bold-font {
@@ -59,11 +56,17 @@ $muli-font: 'Muli', sans-serif;
   background-color: $base-blue;
   margin-top: 2vh;
 }
+.logo:hover {
+  cursor: pointer;
+}
 .image-tile {
   height: 200px;
 }
 .without-border {
   border: none;
+}
+.with-border-right {
+  border-right: 1px solid $base-grey;
 }
 .without-margin {
   margin: 0;
@@ -76,10 +79,22 @@ $muli-font: 'Muli', sans-serif;
   margin-top: 1vh;
   margin-bottom: 1vh;
 }
+.margin-height-10v {
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+.margin-bottom-1v {
+  margin-bottom: 1vh;
+}
 .padding-5px {
   padding: 5px;
 }
 
+// link styles
+.link {
+  text-decoration: none;
+  color: black;
+}
 // calendar styles
 .absolute {
   position: absolute;
@@ -93,7 +108,8 @@ $muli-font: 'Muli', sans-serif;
   max-width: 90%;
   margin: 0 auto;
   padding: 0 20px;
-  box-sizing: border-box }
+  box-sizing: border-box 
+}
 
 .flex-column {
   display: flex;
@@ -107,7 +123,6 @@ $muli-font: 'Muli', sans-serif;
 
 .flex-end {
   justify-content: flex-end;
-  // align-items: flex-end; 
 }
 .space-around{
   justify-content: space-around;
@@ -126,6 +141,9 @@ $muli-font: 'Muli', sans-serif;
 }
 .with-scroll {
   overflow: scroll;
+}
+.self-centered {
+  align-self: center;
 }
 
 // card 
@@ -146,10 +164,9 @@ background: white;
 .location-suggestion:hover {
   background-color: #d3d3d3;
 }
-
 // width
 .auto-wide {
-  max-width: auto;
+  width: auto;
 }
 .thirty-wide {
   width: 30vw;
@@ -178,6 +195,9 @@ background: white;
 .seventy-percent-wide {
   width: 70%;
 }
+.three-quarters-parent-wide {
+  width: 75%;
+}
 .full-parent-wide {
   width: 100%;
 }
@@ -192,6 +212,9 @@ background: white;
 }
 .half-screen-high {
   height: 50vh;
+}
+.full-parent-high {
+  height: 100%
 }
 //backgrounds 
 .with-background {
@@ -208,8 +231,8 @@ background: white;
   border: 16px solid #f3f3f3;
   border-radius: 50%;
   border-top: 16px solid #020303;
-  width: 120px;
-  height: 120px;
+  width: 60px;
+  height: 60px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }

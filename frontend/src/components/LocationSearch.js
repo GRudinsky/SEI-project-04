@@ -8,8 +8,8 @@ export default class LocationSearch extends React.Component {
     super()
     this.state = {
       locationSuggestions: null,
-      chosenLocation: null,
-      searchFieldValue: null,
+      chosenLocation: undefined,
+      searchFieldValue: '',
       dropdownActive: false
     }
     this.suggestLocations = this.suggestLocations.bind(this)
@@ -28,10 +28,10 @@ export default class LocationSearch extends React.Component {
   }
   deleteLocation(e) {
     e.target.value = ''
-    this.setState({ chosenLocation: '', locationSuggestions: null }, this.clearSearchField(e))
+    this.setState({ chosenLocation: undefined, locationSuggestions: null }, this.clearSearchField())
   }
   clearSearchField() {
-    this.setState({ searchFieldValue: null })
+    this.setState({ searchFieldValue: undefined })
   }
 
   suggestLocations(e) {
@@ -44,11 +44,10 @@ export default class LocationSearch extends React.Component {
     return (arg === 'country' ? <FontAwesomeIcon icon={faGlobeAmericas} /> : (arg === 'airport' ? <FontAwesomeIcon icon={faPlaneDeparture} /> : <FontAwesomeIcon icon={faCity} /> ))
   }
 
-
   render () {
     // console.log(this.state)
     const { dropdownActive, locationSuggestions, searchFieldValue } = this.state
-    const { suggestLocations, openDropdown, setLocation, deleteLocation, closeOnBlur } = this
+    const { suggestLocations, openDropdown, setLocation, deleteLocation } = this
    
     return (
       <>
@@ -60,6 +59,7 @@ export default class LocationSearch extends React.Component {
         onChange={suggestLocations}
         onClick={deleteLocation}
         onFocus={openDropdown}
+        onBlur={this.props.closeOnBlur}
         autoComplete="off"
       />
           {dropdownActive &&

@@ -2,9 +2,9 @@ import React from 'react'
 import LocationSearch from './LocationSearch'
 import Calendar from './Calendar'
 
-const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
+const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
   return (
-    <div className="search-bar with-shadow quarter-screen-high flex-column centered" >
+    <div className="search-bar with-shadow quarter-screen-high flex-column centered margin-bottom-1v" >
       <form className="container" value="form" onSubmit={handleSubmit} >
         <div className="flex-row">
           <div className="quarter-parent-wide">
@@ -33,7 +33,8 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
             </div>
             {departureCalendarActive &&
                 <Calendar
-                  {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeCalendar }}
+                  {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeOnBlur }}
+                  divTitle="departureCalendar"
                   disableDates={date => date < new Date() - 86400000}
                 />}
           </div>
@@ -49,9 +50,10 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
             </div>
             {returnCalendarActive &&
                 <Calendar
-                  {...{ handleDateChange, departureCalendarActive, returnCalendarActive }}
+                  {...{ handleDateChange, departureCalendarActive, returnCalendarActive, closeOnBlur }}
                   disableDates={date => date < returnDateLimit}
                   startDate={endDate}
+                  divTitle="returnCalendar"
                 />}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import SuggestionsCard from './SuggestionsCard'
+import LoadingScreen from './Common/LoadingScreen'
 import Map from './Common/Map'
 import WebMercatorViewport from 'viewport-mercator-project'
 
@@ -11,7 +12,9 @@ export default class FlightSuggestions extends React.Component {
   constructor() {
     super()
     this.state = {
-      suggestionResults: null 
+      suggestionResults: null, 
+      loading: true,
+      loadingMessage: 'Loading flight suggestions...'
     }
     this.flightDurations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
     this.monthsAhead = 1
@@ -69,12 +72,9 @@ export default class FlightSuggestions extends React.Component {
 
   findOrigin() {
     const obj = { 'searchString': this.state.origin }
-    // console.log(obj)
     axios.post('/api/proxy/locationSuggestions/', obj)
-      // .then(res => res.data.locations[0].type === 'airport' ? this.setState({ origin: (res.data.locations[0].city.name) }, this.getDurationsAndFlights()) : this.setState({ origin: (res.data.locations[0].name) }, this.getDurationsAndFlights()))
-      .then(res => this.setState({ origin: res.data.locations[0].type === 'airport' ? res.data.locations[0].city.name : res.data.locations[0].name }, this.getDurationsAndFlights()))
-      // .then(res => console.log('suggestions', res))
-      .catch(err => console.log('errors', err))
+      .then(res => this.setState({ origin: res.data.locations[0].type === 'airport' ? res.data.locations[0].city.name : res.data.locations[0].name, loading: false  }, this.getDurationsAndFlights()))
+      .catch(err => this.setState({ errors: err.message, loadingMessage: 'Oops, something went wrong!' }))
   }
   getMoreSuggestions(e) {
     // console.log(e.currentTarget.id)
@@ -109,11 +109,25 @@ export default class FlightSuggestions extends React.Component {
     }
     return `Cheapest destinations from ${this.state.origin} in ${this.props.suggestionsData.defaultWeeksAhead} weeks time`
   }
+  // toggleLoadingScreen(arg) {
+  //   console.log('loading', this.state.loading)
+  //   // return this.state.loading === false ? this.setState({ loading: true }) : this.setState({ loading: false })
+  //   return this.setState({ loading: arg })
+  // }
   render() {
-    if (!this.state.suggestionResults) return null
+    // if (!this.state.suggestionResults) return null
+    // console.log(this.state.suggestionResults)
     suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
     return (
       <div className="container">
+        <div>
+          {(this.state.loading || this.state.errors) && 
+        <LoadingScreen 
+          message = {this.state.loadingMessage}/>
+          }
+        </div>
+        { this.state.suggestionResults && 
+        <>
         <h4 className="bold-font">{this.getSuggestionsText()}</h4>
         <div className="flex-row space-between with-scroll">
           {suggestionsByDurations.filter(flight => flight !== undefined)
@@ -130,6 +144,8 @@ export default class FlightSuggestions extends React.Component {
             ))
           }
         </div>
+          </>}
+
         {this.state.hourlySuggestionsBarActive &&
           <div>
             <h4 className = "bold-font">All destinations {this.state.hoursOnFilter} hours away:</h4>

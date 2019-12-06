@@ -1,13 +1,11 @@
 import React from 'react'
 import ReactMapGL, { Marker, Popup, LinearInterpolator, FlyToInterpolator } from 'react-map-gl'
 import axios from 'axios'
-
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-
 export default class Map extends React.Component {
-  constructor({ ...props }) {
-    super({ props })
+  constructor() {
+    super()
     this.state = {
       viewport: {
         width: 800,
@@ -42,12 +40,12 @@ export default class Map extends React.Component {
       this.flyToBoundaries()
     }
   }
-  getImage(value) { // to be deleted if not displaying imamges on popup hover
-    const obj = { 'searchString': value }
-    axios.post('/api/proxy/imageSearch/', obj)
-      .then(res => this.setState({ popupImage: res.data.hits[Math.floor(Math.random() * res.data.hits.length)].webformatURL }))
-      .catch(err => console.log('errors', err))
-  }
+  // getImage(value) { // to be deleted if not displaying imamges on popup hover
+  //   const obj = { 'searchString': value }
+  //   axios.post('/api/proxy/imageSearch/', obj)
+  //     .then(res => this.setState({ popupImage: res.data.hits[Math.floor(Math.random() * res.data.hits.length)].webformatURL }))
+  //     .catch(err => console.log('errors', err))
+  // }
   getPopupValue(e) {
     // console.log('popup id', e.target.id)
     this.setState({ cityOnPopup: e.target.id }, this.props.handleChange(e) )
@@ -56,9 +54,8 @@ export default class Map extends React.Component {
     this.setState({ cityOnPopup: null })
   }
 
-
   render() {
-    const { data, lat, lng, bounds } = this.props
+    const { data, lat, lng, bounds } = this.props //lat, lng, bounds for markers only
     console.log(data)
     return (
       <div>
@@ -70,11 +67,11 @@ export default class Map extends React.Component {
             onViewportChange={(viewport) => this.setState({ viewport })}
             renderChildrenInPortal={true}
           >
-            {/* <Marker
+            {/* <Marker   // MID, SW, NE markers for development purposes only
               latitude={lat}
               longitude={lng}
             >
-              <div className="marker">Mid</div>
+              <div className="marker">MID</div>
             </Marker>
             <Marker
               latitude={lat}
@@ -108,16 +105,13 @@ export default class Map extends React.Component {
                 <div
                   title="destination"
                   id={point.cityCodeTo}
-                  className="small-text without-margin"
+                  className="popup small-text without-margin"
                   onMouseEnter={this.getPopupValue}
                   onMouseLeave={this.clearPopupValue}
                   onClick={this.props.searchFromMap}
                 >
-                  {/* {point.cityTo}, {point.price}{Object.keys(point.conversion)[0]} */}
-                  {this.state.cityOnPopup === point.cityCodeTo ? `Find Flights to ${point.cityTo}` : `${point.cityTo}, ${point.price}${Object.keys(point.conversion)[0]}`} 
-                    
+                  {this.state.cityOnPopup === point.cityCodeTo ? `Find Flights to ${point.cityTo}` : `${point.cityTo}, ${point.price}${Object.keys(point.conversion)[0]}`}                   
                 </div>
-                {/* <img className="image-tile suggestion-card-image with-shadow quarter-parent-wide without-margin" src={this.state.popupImage && this.state.popupImage}></img> */}
               </Popup>))}
           </ReactMapGL>
         </div>

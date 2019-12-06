@@ -61,13 +61,13 @@ export default class SearchResults extends React.Component {
     const { filterData, filteredResults } = this.state
     // console.log(this.state)
     return (
-      <section className="flex-row">
-        <div className="filters quarter-parent-wide">
-          {filterData.layovers && 
-          <div className="slidecontainer">
+      <section className="flex-row space-between full-parent-wide">
+        <div className="quarter-parent-wide with-border-right">
+          <div className="flex-column centered margin-height-10v">
+            {filterData.layovers && 
+          <div className="slidecontainer three-quarters-parent-wide">
             <p className="small-text without-margin">Max Layovers: 
               {layovers && layovers - 1}
-              {/* {filters.layovers - 1} */}
             </p>
             <input 
               type="range" 
@@ -75,36 +75,38 @@ export default class SearchResults extends React.Component {
               max={this.getMaxValue(filterData.layovers)}
               defaultValue={this.getMaxValue(filterData.layovers)}
               step="1"
-              className="slider" 
+              className="slider full-parent-wide" 
               id="layovers"
               onChange={this.handleChange}/>
           </div>}
-          {filterData.prices &&
-            <div className="slidecontainer">
-              <p className="small-text without-margin">Max Price: 
-                {price && price}
-                {/* {filters.price} */}
-              </p>
-              <input
-                type="range"
-                min={this.getMinValue(filterData.prices)}
-                max={this.getMaxValue(filterData.prices)}
-                defaultValue={this.getMaxValue(filterData.prices)}
-                step="1"
-                className="slider"
-                id="price"
-                onChange={this.handleChange}/>
-            </div>}
+            {filterData.prices &&
+              <div className="slidecontainer three-quarters-parent-wide">
+                <p className="small-text without-margin">Max Price: 
+                  {price && price}
+                </p>
+                <input
+                  type="range"
+                  min={this.getMinValue(filterData.prices)}
+                  max={this.getMaxValue(filterData.prices)}
+                  defaultValue={this.getMaxValue(filterData.prices)}
+                  step="1"
+                  className="slider full-parent-wide"
+                  id="price"
+                  onChange={this.handleChange}/>
+              </div>}
+          </div>
         </div>
         {filteredResults && 
-        <div>
-          <h1>{filteredResults.length} flights found:</h1>
+        <div className="margin-width-1v half-parent-wide">
+          <h2>{filteredResults.length} {filteredResults.length === 1 ? 'flight' : 'flights'} found:</h2>
           {filteredResults.map(flight => (
             <ResultsCard key={flight.id}
               {...flight}
               currency={flightResults.currency} />))
           }
         </div>}
+        <div className="quarter-parent-wide">
+        </div>
       </section>
     )
   }

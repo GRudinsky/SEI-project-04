@@ -1,17 +1,4 @@
 import React from 'react'
-import Select from 'react-select'
-
-// const options = [
-//   { value: 'EUR', label: 'EUR - €' },
-//   { value: 'GBP', label: 'GBP - £' },
-//   { value: 'USD', label: 'USD - $' }
-// ]
-// const RegionalSettings = ({ handleChange }) => (
-//   <Select
-//     options={options}
-//     onChange={handleChange}
-//   />
-// )
 
 const CurrencySelector = ({ handleChange, currency }) => (
   <form className="flex-row without-margin">
