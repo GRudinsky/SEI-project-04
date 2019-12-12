@@ -17,7 +17,6 @@ export default class FlightSuggestions extends React.Component {
       loadingMessage: 'Loading flight suggestions...'
     }
     this.flightDurations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
-    this.monthsAhead = 1
     this.getMoreSuggestions = this.getMoreSuggestions.bind(this)
     this.fitToBounds = this.fitToBounds.bind(this)
   }
@@ -46,7 +45,6 @@ export default class FlightSuggestions extends React.Component {
       .forEach(duration => suggestionsByDurations.push(this.getCheapestByDuration(this.state.suggestionResults.data, duration)))
   }
   getAllFlightsForDuration(arg) {
-    // console.log(this.state.suggestionResults.data.filter(flight => this.getHoursOnly(flight.duration.total) === (parseInt(this.state.filterHours) - 1)))
     suggestionsByHour = this.state.suggestionResults.data.filter(flight => this.getHoursOnly(flight.duration.total) === (parseInt(arg) - 1))
   }
   getSuggestions() {
@@ -57,7 +55,7 @@ export default class FlightSuggestions extends React.Component {
       'origin': origin,
       'date': date,
       'currency': currency
-    } // getting cheapest direct flight suggestions from origin to all destinations in number of months that equals to this.monthsAhead value.
+    } // getting cheapest direct flight suggestions from last searched or default origin to all destinations in last searched date or date ahead by this.props.defaultValue(2 weeks as default).
     axios.post('/api/proxy/flightSuggestions/', obj)
       .then(res => this.setState({ suggestionResults: res.data, currency, origin, date }, this.findOrigin()))
       .catch(err => console.log('errors', err))
@@ -99,8 +97,6 @@ export default class FlightSuggestions extends React.Component {
       bearing: 0,
       pitch: 0
     }).fitBounds(this.getMapBounds())
-    // .fitBounds(this.props.bounds, { padding: { top: 82, bottom: 30, left: leftPadding, right: 30 } })
-    // console.log(longitude, latitude, zoom)
     return [longitude, latitude, zoom]
   }
   getSuggestionsText() {
@@ -109,11 +105,6 @@ export default class FlightSuggestions extends React.Component {
     }
     return `Cheapest destinations from ${this.state.origin} in ${this.props.suggestionsData.defaultWeeksAhead} weeks time`
   }
-  // toggleLoadingScreen(arg) {
-  //   console.log('loading', this.state.loading)
-  //   // return this.state.loading === false ? this.setState({ loading: true }) : this.setState({ loading: false })
-  //   return this.setState({ loading: arg })
-  // }
   render() {
     // if (!this.state.suggestionResults) return null
     // console.log(this.state.suggestionResults)
