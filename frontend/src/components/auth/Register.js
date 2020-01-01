@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 
-import SplashScreen from '../common/SplashScreen'
 import ProfileForm from './ProfileForm'
+import LoadingScreen from '../Common/LoadingScreen'
 
 class Register extends React.Component {
   constructor() {
@@ -12,11 +12,8 @@ class Register extends React.Component {
         username: '',
         email: '',
         password: '',
-        passwordconfirmation: '',
-        image: '',
-        address: ''
+        password_confirmation: ''
       },
-      loading: false,
       formData: {
         title: 'Register'
       },
@@ -25,30 +22,32 @@ class Register extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
+  takeToPage(arg) {
+    setTimeout(() => this.props.history.push(arg), 2000)
+  }
 
   handleSubmit(e) {
     e.preventDefault()
     axios.post('/api/register', this.state.data)
-      .then(res => this.setState({ splashMessage: res.data.message, loading: true }))
-      .then(() => {
-        setTimeout(() => this.props.history.push('/login'), 1000)
-      })
-      .catch(err => this.setState({ errors: err.response.data.errors }))
+      .then(res => this.setState({ loading: true, loadingMessage: res.data.message }))
+      .then(() => this.takeToPage('/'))
+      .catch(err => this.setState({ errors: err.response.data }))
   }
 
   handleChange(e) {
     const data = { ...this.state.data, [e.target.name]: e.target.value }
-    // console.log(errors)
     this.setState({ data })
   }
 
   render() {
-    if (this.state.loading) return (
-      <SplashScreen
-        message={this.state.splashMessage}
-      />
-    )
     return (
+      <>
+      {this.state.loading && 
+      <LoadingScreen 
+        message = {this.state.loadingMessage}
+      />
+      }
+      {!this.state.loading &&
       <ProfileForm
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
@@ -56,6 +55,8 @@ class Register extends React.Component {
         formData={this.state.formData}
         errors={this.state.errors}
       />
+      }
+      </>
     )
   }
 }

@@ -1,14 +1,14 @@
 # pylint: disable=no-member,arguments-differ
 from rest_framework import serializers
-from .models import Search, Proxy_Search
 from django.contrib.auth import get_user_model
+from .models import Search, Proxy_Search
 User = get_user_model()
- 
+
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id','username')
+        fields = ('id', 'username')
 
 
 class SearchSerializer(serializers.ModelSerializer):
@@ -23,7 +23,8 @@ class ProxySearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proxy_Search
         fields = ('origin', 'destination', 'departure_date', 'return_date', 'currency')
-   
+
 class PopulatedSearchSerializer(SearchSerializer):
 
     user = UserSerializer()
+    

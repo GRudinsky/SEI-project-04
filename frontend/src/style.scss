@@ -10,6 +10,10 @@ $muli-font: 'Muli', sans-serif;
 * {
   font-family: $muli-font;
 }
+
+
+
+
 .marker {
   height: 5px;
   width: 5px;
@@ -21,7 +25,15 @@ $muli-font: 'Muli', sans-serif;
   transform: scale(1.2);
   cursor: pointer;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
+.danger {
+  color: red;
+  border-color: red;
+}
+
+.base-color {
+  color: $base-borders;
 }
 
 .small-text {
@@ -32,15 +44,14 @@ $muli-font: 'Muli', sans-serif;
   margin: 0px;
   padding: 6px 10px;
 }
-.base-color {
-  color: $base-borders;
-}
+
 .italic-font {
   font-style: italic;
 }
 .bold-font {
   font-weight: 600;
 }
+
 .search-bar {
   background-color: $base-blue;
   // height: 50vh;

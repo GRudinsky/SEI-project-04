@@ -6,9 +6,10 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY, HTTP_204_NO_CONTENT
 from rest_framework import status
+import requests
 from .models import Search, Proxy_Search
 from .serializers import SearchSerializer, PopulatedSearchSerializer, ProxySearchSerializer
-import requests
+
 
 class ListView(APIView): #proxy request to kiwi to perform flightsearch
     def post(self, request):
@@ -54,9 +55,9 @@ class LocationSuggestionsListView(APIView):
         r = requests.get(url)
         data = r.json()
         return Response(data, status=status.HTTP_200_OK)
-   
+
 class CityDetailView(APIView):
-    def post(self, request): 
+    def post(self, request):
         search_string = request.data.pop('searchString')
         url = f'https://api.skypicker.com/locations?term=${search_string}&locale=en-US&&location_types=city&limit=10&active_only=true&sort=name'
         r = requests.get(url)
@@ -67,10 +68,10 @@ class CityDetailView(APIView):
 class SearchListView(APIView):
     def get(self, _request): # method to handle GET requests to the list view, the INDEX
         searches = Search.objects.all() # get all the posts from the DB
-        serialized_searches = PopulatedSearchSerializer (searches, many=True) # serialise those posts into JSON, letting it know to expect a list of posts as this is an INDEX route!!!!!
+        serialized_searches = PopulatedSearchSerializer(searches, many=True) # serialise those posts into JSON, letting it know to expect a list of posts as this is an INDEX route!!!!!
         return Response(serialized_searches.data) # send that serialised list
 
-    def post(self, request): 
+    def post(self, request):
         if request.user.id:
             request.data['user'] = request.user.id # adding the id of user that performed the search
         else:

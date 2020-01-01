@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.apps import apps
 User = get_user_model()
-Search = apps.get_model('flights','Search')
+Search = apps.get_model('flights', 'Search')
 
 
 class SearchSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         password_confirmation = data.pop('password_confirmation')
 
         if password != password_confirmation:
-            raise ValidationError({'password_confirmation': 'does not match'})
+            raise ValidationError({'password_confirmation': 'Confirmation must match the password.'})
 
         try:  #commented out common password validations
             validations.validate_password(password=password)

@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-import { Link, withRouter } from 'react-router-dom'
 import CurrencySelector from './CurrencySelector'
 import LoadingScreen from './Common/LoadingScreen'
 import FlightSearchBar from './FlightSearchBar'
@@ -74,6 +73,7 @@ export default class Home extends React.Component {
     this.setState({ flightResults: null, loading: true }, this.getFlightResults())
   }
   getFlightResults() {
+    console.log('submitting', this.state.searchData)
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
       .then(res => this.setState({ flightResults: res.data, loading: false }), this.pushSearchtoDB())
       .catch(err => this.setState({ errors: err.message, loadingMessage: 'Ooops, something went wrong...' }))
@@ -118,7 +118,7 @@ export default class Home extends React.Component {
 
   closeOnBlur(e) {
     if (!e.currentTarget.contains(e.relatedTarget)) {
-      console.log(e.relatedTarget, e.currentTarget)
+      // console.log(e.relatedTarget, e.currentTarget)
     }
   }
   refreshPage() {
@@ -126,13 +126,13 @@ export default class Home extends React.Component {
   } 
   componentDidMount() {
     axios.get('api/searches')
-      .then(res => this.setState({ searches: res.data }), this.getStorage())
+      .then(res => this.setState({ searches: res.data }))
       .catch(err => console.log(err))
   }
   render() {
     const { searchData, startDate, endDate, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar } = this
-    console.log('state', this.state)
+    // console.log('state', this.state)
     return (
       <section className="flex-column space-between full-height">
         <header className="navbar tenth-screen-high flex-row space-between">

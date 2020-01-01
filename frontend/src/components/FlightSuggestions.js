@@ -25,6 +25,11 @@ export default class FlightSuggestions extends React.Component {
     this.getStorage()
   }
 
+  getDate() {
+    const time = new Date()
+    return `${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`
+  }
+
   getTime(value) {
     const time = new Date(value * 1000)
     return `${time.getHours() - 1}h ${time.getMinutes()}mins`
@@ -50,7 +55,7 @@ export default class FlightSuggestions extends React.Component {
   getSuggestions() {
     const currency = localStorage.getItem('currency') || this.props.suggestionsData.defaultCurrency
     const origin = localStorage.getItem('origin') || this.props.suggestionsData.defaultOrigin
-    const date = localStorage.getItem('departureDate') || this.props.defaultDate
+    const date = (localStorage.getItem('departureDate') && localStorage.getItem('departureDate') > this.getDate()) ? localStorage.getItem('departureDate') : this.props.defaultDate
     const obj = { 
       'origin': origin,
       'date': date,
@@ -107,8 +112,7 @@ export default class FlightSuggestions extends React.Component {
   }
   render() {
     // if (!this.state.suggestionResults) return null
-    // console.log(this.state.suggestionResults)
-    suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
+    // suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
     return (
       <div className="container">
         <div>

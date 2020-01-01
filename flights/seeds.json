@@ -1,0 +1,90 @@
+[
+{
+  "model": "flights.search",
+  "pk": 1,
+  "fields": {
+    "origin": "KUN",
+    "destination": "LON",
+    "departureDate": "30/12/2019",
+    "returnDate": "30/12/2019",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 2,
+  "fields": {
+    "origin": "KUN",
+    "destination": "BER",
+    "departureDate": "31/12/2019",
+    "returnDate": "31/12/2019",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 3,
+  "fields": {
+    "origin": "KUN",
+    "destination": "NUE",
+    "departureDate": "31/12/2019",
+    "returnDate": "31/12/2019",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 4,
+  "fields": {
+    "origin": "VNO",
+    "destination": "LON",
+    "departureDate": "1/1/2020",
+    "returnDate": "1/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 5,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "1/1/2020",
+    "returnDate": "1/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 6,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "3/1/2020",
+    "returnDate": "3/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 7,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "1/1/2020",
+    "returnDate": "1/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 8,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "2/1/2020",
+    "returnDate": "2/1/2020",
+    "user": 1
+  }
+}
+]
