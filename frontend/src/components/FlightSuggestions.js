@@ -105,7 +105,7 @@ export default class FlightSuggestions extends React.Component {
     return [longitude, latitude, zoom]
   }
   getSuggestionsText() {
-    if (localStorage.getItem('departureDate')) {
+    if ((localStorage.getItem('departureDate') && localStorage.getItem('departureDate') > this.getDate())) {
       return `Still interested in flights from ${this.state.origin} on ${this.state.date }?` 
     }
     return `Cheapest destinations from ${this.state.origin} in ${this.props.suggestionsData.defaultWeeksAhead} weeks time`
