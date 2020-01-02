@@ -42,7 +42,7 @@ export default class Home extends React.Component {
     this.handleDateChange = this.handleDateChange.bind(this)
     this.closeOnBlur = this.closeOnBlur.bind(this)
     this.setStorage = this.setStorage.bind(this)
-    this.getStorage = this.getStorage.bind(this)
+    // this.getStorage = this.getStorage.bind(this)
     this.refreshPage = this.refreshPage.bind(this)
   }
   //form functions
@@ -55,10 +55,13 @@ export default class Home extends React.Component {
   }
   getStorage() {
     const searchData = { ...this.state.searchData }
-    searchData.currency = localStorage.getItem('currency' || '')
-    searchData.origin = localStorage.getItem('origin' || '')
+    searchData.currency = localStorage.getItem('currency') ? localStorage.getItem('currency') : this.suggestionsData.defaultCurrency
+    searchData.origin = localStorage.getItem('origin') ? localStorage.getItem('origin') : this.suggestionsData.defaultOrigin
     return this.setState({ searchData })
   }
+  // deletePassedDate() {
+  //   localStorage.getItem('departureDate') <= this.getDate(Number(new Date)) && localStorage.removeItem('departureDate')
+  // }
 
   searchFromMap() {
     const searchData = this.state.searchData
@@ -126,13 +129,13 @@ export default class Home extends React.Component {
   } 
   componentDidMount() {
     axios.get('api/searches')
-      .then(res => this.setState({ searches: res.data }))
+      .then(res => this.setState({ searches: res.data }), this.getStorage())
       .catch(err => console.log(err))
   }
   render() {
     const { searchData, startDate, endDate, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar } = this
-    // console.log('state', this.state)
+    console.log('state', this.state)
     return (
       <section className="flex-column space-between full-height">
         <header className="navbar tenth-screen-high flex-row space-between">

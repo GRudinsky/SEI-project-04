@@ -22,12 +22,7 @@ export default class FlightSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    this.getStorage()
-  }
-
-  getDate() {
-    const time = new Date()
-    return `${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`
+    this.getSuggestions()
   }
 
   getTime(value) {
@@ -55,7 +50,7 @@ export default class FlightSuggestions extends React.Component {
   getSuggestions() {
     const currency = localStorage.getItem('currency') || this.props.suggestionsData.defaultCurrency
     const origin = localStorage.getItem('origin') || this.props.suggestionsData.defaultOrigin
-    const date = (localStorage.getItem('departureDate') && localStorage.getItem('departureDate') > this.getDate()) ? localStorage.getItem('departureDate') : this.props.defaultDate
+    const date = localStorage.getItem('departureDate') ? localStorage.getItem('departureDate') : this.props.defaultDate
     const obj = { 
       'origin': origin,
       'date': date,
@@ -65,16 +60,9 @@ export default class FlightSuggestions extends React.Component {
       .then(res => this.setState({ suggestionResults: res.data, currency, origin, date }, this.findOrigin()))
       .catch(err => console.log('errors', err))
   }
-  getStorage() {
-    // const searchData = { ...this.state.searchData }
-    const currency = localStorage.getItem('currency' || '')
-    const origin = localStorage.getItem('origin' || '')
-    const departureDate = localStorage.getItem('departureDate' || '')
-    return this.setState({ currency, origin, departureDate }, this.getSuggestions())
-  }
 
   findOrigin() {
-    const obj = { 'searchString': this.state.origin }
+    const obj = { 'searchString': this.props.searchData.origin }
     axios.post('/api/proxy/locationSuggestions/', obj)
       .then(res => this.setState({ origin: res.data.locations[0].type === 'airport' ? res.data.locations[0].city.name : res.data.locations[0].name, loading: false  }, this.getDurationsAndFlights()))
       .catch(err => this.setState({ errors: err.message, loadingMessage: 'Oops, something went wrong!' }))
@@ -105,8 +93,8 @@ export default class FlightSuggestions extends React.Component {
     return [longitude, latitude, zoom]
   }
   getSuggestionsText() {
-    if ((localStorage.getItem('departureDate') && localStorage.getItem('departureDate') > this.getDate())) {
-      return `Still interested in flights from ${this.state.origin} on ${this.state.date }?` 
+    if (localStorage.getItem('departureDate')) {
+      return `Still interested in flights from ${this.state.origin} on ${localStorage.getItem('departureDate')}?` 
     }
     return `Cheapest destinations from ${this.state.origin} in ${this.props.suggestionsData.defaultWeeksAhead} weeks time`
   }
