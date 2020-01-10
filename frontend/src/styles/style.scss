@@ -15,19 +15,6 @@ html {
   font-family: $muli-font;
 }
 
-.marker {
-  height: 5px;
-  width: 5px;
-  background-color: red;
-  border-radius: 3px;
-}
-
-.mapboxgl-popup-content:hover {
-  transform: scale(1.2);
-  cursor: pointer;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
 .danger {
   color: red;
   border-color: red;
@@ -53,12 +40,7 @@ html {
   font-weight: 600;
 }
 
-.search-bar {
-  background-color: $base-blue;
-  // height: 50vh;
-  // background-image: url('https://i.ibb.co/QmDnZdS/DSC048451111112.jpg');
-  background-size: cover;
-}
+
 .full-height {
   min-height: 100vh;
 }
@@ -158,17 +140,7 @@ html {
   align-self: center;
 }
 
-// card 
 
-.card {
-border: 1px solid $base-borders;
-border-radius: 4px;
-background: white;
-}
-.card:hover {
-  transform:scale(1.025);
-  cursor: pointer;
-}
 
 .with-shadow {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -238,25 +210,5 @@ background: white;
   cursor: pointer;
 }
 
-//loading spinner
-.loader {
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #020303;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
-}
 
-/* Safari */
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 

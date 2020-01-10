@@ -1,0 +1,13 @@
+@import "../../../../styles/style.scss";
+
+// card 
+
+.card {
+border: 1px solid $base-borders;
+border-radius: 4px;
+background: white;
+}
+.card:hover {
+  transform:scale(1.025);
+  cursor: pointer;
+}

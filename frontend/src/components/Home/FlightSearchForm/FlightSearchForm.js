@@ -1,6 +1,7 @@
 import React from 'react'
-import LocationSearch from './locationSearch/LocationSearch'
-import Calendar from './calendar/Calendar'
+import LocationSearch from './LocationSearch/LocationSearch'
+import Calendar from './Calendar/Calendar'
+import './FlightSearchForm.scss'
 
 const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
   return (

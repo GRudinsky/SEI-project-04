@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import './SuggestionsCard.scss'
 
 export default class SuggestionsCard extends React.Component {
   constructor({ props }) {
@@ -31,8 +32,12 @@ export default class SuggestionsCard extends React.Component {
   render () {
     const { duration, conversion, price, cityTo } = this.props
     return (
-      <div id={this.getHoursOnly(duration)} className="card with-shadow quarter-parent-wide margin-width-1v margin-height-1v" 
-        onClick={this.props.getMoreSuggestions}>
+      <div 
+        id={this.getHoursOnly(duration)} 
+        title={cityTo}
+        className="card with-shadow quarter-parent-wide margin-width-1v margin-height-1v" 
+        onClick={this.props.getMoreSuggestions}
+      >
         <div>
           {this.getHoursOnly(duration)} {this.getHoursOnly(duration) === 1 ? 'hour' : 'hours'} away
         </div>

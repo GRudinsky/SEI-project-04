@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import CurrencySelector from './currencySelector/CurrencySelector'
 
-const Header = ({ handleChange, refreshPage, currency, searches }) => (
-  <header className="navbar tenth-screen-high flex-row space-between">
+const refreshPage = () => window.location.reload(false)
+
+const Header = ({ handleChange, currency, searches }) => (
+  <header className="without-margin tenth-screen-high flex-row space-between">
     <div className="logo margin-width-1v" onClick={refreshPage}>
       <h5 className="without-margin bold-font italic-font">find_That_flight<FontAwesomeIcon icon={faPaperPlane} /></h5>
       {searches && (

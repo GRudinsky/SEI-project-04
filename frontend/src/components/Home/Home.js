@@ -1,10 +1,11 @@
 import React from 'react'
 import axios from 'axios'
-import Header from './header/Header'
-import LoadingScreen from '../../common/LoadingScreen'
-import FlightSearchForm from './search/searchForm/FlightSearchForm'
-import SearchResults from './search/searchResults/SearchResults'
-import FlightSuggestions from './suggestions/FlightSuggestions'
+import Header from './Header/Header'
+import LoadingScreen from '../common/LoadingScreen/LoadingScreen'
+import FlightSearchForm from './FlightSearchForm/FlightSearchForm'
+import SearchResults from './SearchResults/SearchResults'
+import FlightSuggestions from './FlightSuggestions/FlightSuggestions'
+import './Home.scss'
 
 export default class Home extends React.Component {
   constructor() {
@@ -118,11 +119,10 @@ export default class Home extends React.Component {
       .catch(err => console.log(err))
   }
   render() {
-    const { searchData, startDate, endDate, searches, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
-    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, refreshPage } = this
-    // console.log('state', this.state)
+    const { loading, loadingMessage, errors, searchData, startDate, endDate, searches, flightResults, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
+    const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, refreshPage, searchFromMap, suggestionsData } = this
     return (
-      <section className="flex-column space-between full-height">
+      <section className="home flex-column space-between">
         <Header
           searches = {searches}
           handleChange = {handleChange}
@@ -132,29 +132,24 @@ export default class Home extends React.Component {
         <FlightSearchForm 
           {...{ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }}
         />
-        <div className="flex-column centered full-parent-high">
-          {(this.state.loading || this.state.errors) && 
+        <div className="content flex-column centered full-parent-high">
+          {(loading || errors) && 
           <LoadingScreen 
-            message = {this.state.loadingMessage}/>}
-          {this.state.flightResults && 
+            message = {loadingMessage}/>}
+          {flightResults && 
           <SearchResults 
-            flightResults = {this.state.flightResults}/>}          
-        </div>
-        <div className="flex-column centered">
-          {(!this.state.flightResults && !this.state.loading) &&
+            flightResults = {flightResults}/>}          
+          {/* </div>
+        <div className="flex-column centered"> */}
+          {(!flightResults && !loading) &&
           <FlightSuggestions 
             handleChange={handleChange}
-            searchFromMap={this.searchFromMap}
-            suggestionsData={this.suggestionsData}
+            searchFromMap={searchFromMap}
+            suggestionsData={suggestionsData}
             searchData={searchData}
-            defaultDate={this.getDateFromWeeksAhead(this.suggestionsData.defaultWeeksAhead)}
+            defaultDate={this.getDateFromWeeksAhead(suggestionsData.defaultWeeksAhead)}
           />}
         </div>
-        <footer className="footer with-shadow tenth-screen-high flex-row flex-end">
-          <div className="flex-column centered margin-width-1v">
-            <p className="small-text without-margin ">GRudinsky 2019</p>
-          </div>
-        </footer>
       </section>
     )
   }

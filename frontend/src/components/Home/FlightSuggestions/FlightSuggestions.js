@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import SuggestionsCard from './suggestionsCard/SuggestionsCard'
-import LoadingScreen from '../../../common/LoadingScreen'
-import Map from './suggestionsMap/Map'
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen'
+import Map from './SuggestionsMap/SuggestionsMap'
 import WebMercatorViewport from 'viewport-mercator-project'
 
 const suggestionsByDurations = [] // this array fills with flight data as soon as component mounts
@@ -12,7 +12,7 @@ export default class FlightSuggestions extends React.Component {
   constructor() {
     super()
     this.state = {
-      suggestionResults: null, 
+      suggestionResults: null,
       loading: true,
       loadingMessage: 'Loading flight suggestions...'
     }
@@ -68,8 +68,7 @@ export default class FlightSuggestions extends React.Component {
       .catch(err => this.setState({ errors: err.message, loadingMessage: 'Oops, something went wrong!' }))
   }
   getMoreSuggestions(e) {
-    // console.log(e.currentTarget.id)
-    return this.setState({ hourlySuggestionsBarActive: true, hoursOnFilter: e.currentTarget.id }, this.getAllFlightsForDuration(e.currentTarget.id))
+    return this.setState({ hourlySuggestionsBarActive: true, hoursOnFilter: e.currentTarget.id, cityOnFilter: e.currentTarget.title }, this.getAllFlightsForDuration(e.currentTarget.id))
   }
 
   getMapBounds() {
@@ -100,17 +99,19 @@ export default class FlightSuggestions extends React.Component {
     return `Cheapest destinations from ${this.state.origin} in ${this.props.suggestionsData.defaultWeeksAhead} weeks time`
   }
   render() {
-    // if (!this.state.suggestionResults) return null
     // suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
+    const { loading, loadingMessage, errors, suggestionResults, cityOnFilter, hoursOnFilter  } = this.state
+    const { getMoreSuggestions, fitToBounds, getMapBounds } = this
+    const { handleChange, searchFromMap } = this.props
     return (
       <div className="container">
         <div>
-          {(this.state.loading || this.state.errors) && 
+          {(loading || errors) && 
         <LoadingScreen 
-          message = {this.state.loadingMessage}/>
+          message = {loadingMessage}/>
           }
         </div>
-        { this.state.suggestionResults && 
+        { suggestionResults && 
         <>
         <h4 className="bold-font">{this.getSuggestionsText()}</h4>
         <div className="flex-row space-between with-scroll">
@@ -123,7 +124,7 @@ export default class FlightSuggestions extends React.Component {
                 conversion={flight.conversion}
                 cityTo={flight.cityTo}
                 flight={flight}
-                getMoreSuggestions={this.getMoreSuggestions}
+                getMoreSuggestions={getMoreSuggestions}
               />
             ))
           }
@@ -132,15 +133,15 @@ export default class FlightSuggestions extends React.Component {
 
         {this.state.hourlySuggestionsBarActive &&
           <div>
-            <h4 className = "bold-font">All destinations {this.state.hoursOnFilter} hours away:</h4>
-            <Map
-              handleChange={this.props.handleChange}
-              searchFromMap={this.props.searchFromMap}
+            <h4 className = "bold-font">{cityOnFilter} and other destinations {hoursOnFilter} hours away:</h4>
+            <Map 
+              handleChange={handleChange}
+              searchFromMap={searchFromMap}
               data = {suggestionsByHour}
-              bounds={this.getMapBounds()}
-              lng={this.fitToBounds()[0]}
-              lat={this.fitToBounds()[1]}
-              zoom={this.fitToBounds()[2] < 6 ? this.fitToBounds()[2] - 0.1 : 6} // if one result, setting max-zoom to 6 to avoid over-magnifying, if more results, adding padding by reducing zoom by 0.1
+              bounds={getMapBounds()}
+              lng={fitToBounds()[0]}
+              lat={fitToBounds()[1]}
+              zoom={fitToBounds()[2] < 6 ? fitToBounds()[2] - 0.1 : 6} // if one result, setting max-zoom to 6 to avoid over-magnifying, if more results, adding padding by reducing zoom by 0.1
             />
           </div>
         }

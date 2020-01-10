@@ -21,7 +21,6 @@ export default class LocationSearch extends React.Component {
   openDropdown() {
     this.setState({ dropdownActive: true })
   }
-
   setLocation(e) {
     this.props.handleChange(e)
     this.setState({ chosenLocation: e.target.id , dropdownActive: false, searchFieldValue: e.target.id })
@@ -33,7 +32,6 @@ export default class LocationSearch extends React.Component {
   clearSearchField() {
     this.setState({ searchFieldValue: undefined })
   }
-
   suggestLocations(e) {
     const obj = { 'searchString': e.target.value }
     axios.post('/api/proxy/locationSuggestions/', obj)
@@ -43,7 +41,6 @@ export default class LocationSearch extends React.Component {
   setIcon(arg) {
     return (arg === 'country' ? <FontAwesomeIcon icon={faGlobeAmericas} /> : (arg === 'airport' ? <FontAwesomeIcon icon={faPlaneDeparture} /> : <FontAwesomeIcon icon={faCity} /> ))
   }
-
   render () {
     // console.log(this.state)
     const { dropdownActive, locationSuggestions, searchFieldValue } = this.state

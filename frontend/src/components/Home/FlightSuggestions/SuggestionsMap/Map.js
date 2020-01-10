@@ -1,7 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import ReactMapGL, { Popup, FlyToInterpolator } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import React from './node_modules/reacte_modules/react'
+import ReactDOM from './node_modules/react-domdules/react-dom'
+import ReactMapGL, { Popup, FlyToInterpolator } from './node_modules/react-map-gles/react-map-gl'
+import './node_modules/mapbox-gl/dist/mapbox-gl.csst/mapbox-gl.css'
+import './map.scss'
 
 export default class Map extends React.Component {
   constructor() {
@@ -56,7 +57,7 @@ export default class Map extends React.Component {
   }
 
   render() {
-    const { data, lat, lng, bounds } = this.props //lat, lng, bounds for markers only
+    const { data } = this.props //lat, lng, bounds for markers only
     // console.log(data)
     return (
       <div>

@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 
 import ProfileForm from '../common/ProfileForm'
-import LoadingScreen from '../../common/LoadingScreen'
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen'
 
 class Register extends React.Component {
   constructor() {
