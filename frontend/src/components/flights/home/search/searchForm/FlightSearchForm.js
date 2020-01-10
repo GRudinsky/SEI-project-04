@@ -1,8 +1,8 @@
 import React from 'react'
-import LocationSearch from './LocationSearch'
-import Calendar from './Calendar'
+import LocationSearch from './locationSearch/LocationSearch'
+import Calendar from './calendar/Calendar'
 
-const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
+const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
   return (
     <div className="search-bar with-shadow quarter-screen-high flex-column centered margin-bottom-1v" >
       <form className="container" value="form" onSubmit={handleSubmit} >
@@ -65,4 +65,4 @@ const FlightSearchBar = ({ searchData, startDate, endDate, departureCalendarActi
   )
 }
 
-export default FlightSearchBar
+export default FlightSearchForm

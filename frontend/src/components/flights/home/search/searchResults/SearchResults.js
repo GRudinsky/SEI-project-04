@@ -1,5 +1,5 @@
 import React from 'react' 
-import ResultsCard from './ResultsCard'
+import ResultsCard from './resultsCard/ResultsCard'
 
 let price = null // external variable to avoid delay in state update
 let layovers = null // external variable to avoid delay in state update

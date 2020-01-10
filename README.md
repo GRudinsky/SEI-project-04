@@ -37,17 +37,17 @@ Web version can be found on [Heroku](https://findtahtflight.herokuapp.com/)
 Clone the repository and run on your machine. 
 
 Install the packages listed in the package.json file by running the following terminal command:
-
+```
 $ yarn install
-
+```
 Run the app on with the following command:
-
+```
 $ yarn start
-
+```
 Start your browser and navigate to following address:
-
+```
 http://localhost:4000/
-
+```
 ---
 ## Usage
 

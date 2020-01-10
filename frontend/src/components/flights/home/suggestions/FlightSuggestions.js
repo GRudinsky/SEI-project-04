@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
-import SuggestionsCard from './SuggestionsCard'
-import LoadingScreen from './Common/LoadingScreen'
-import Map from './Common/Map'
+import SuggestionsCard from './suggestionsCard/SuggestionsCard'
+import LoadingScreen from '../../../common/LoadingScreen'
+import Map from './suggestionsMap/Map'
 import WebMercatorViewport from 'viewport-mercator-project'
 
 const suggestionsByDurations = [] // this array fills with flight data as soon as component mounts
@@ -64,7 +64,7 @@ export default class FlightSuggestions extends React.Component {
   findOrigin() {
     const obj = { 'searchString': this.props.searchData.origin }
     axios.post('/api/proxy/locationSuggestions/', obj)
-      .then(res => this.setState({ origin: res.data.locations[0].type === 'airport' ? res.data.locations[0].city.name : res.data.locations[0].name, loading: false  }, this.getDurationsAndFlights()))
+      .then(res => this.setState({ origin: res.data.locations[0].name, loading: false }, this.getDurationsAndFlights()))
       .catch(err => this.setState({ errors: err.message, loadingMessage: 'Oops, something went wrong!' }))
   }
   getMoreSuggestions(e) {

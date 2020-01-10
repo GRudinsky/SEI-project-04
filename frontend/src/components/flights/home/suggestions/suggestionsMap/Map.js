@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactMapGL, { Marker, Popup, LinearInterpolator, FlyToInterpolator } from 'react-map-gl'
-import axios from 'axios'
+import ReactMapGL, { Popup, FlyToInterpolator } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 export default class Map extends React.Component {
@@ -40,12 +39,6 @@ export default class Map extends React.Component {
       this.flyToBoundaries()
     }
   }
-  // getImage(value) { // to be deleted if not displaying imamges on popup hover
-  //   const obj = { 'searchString': value }
-  //   axios.post('/api/proxy/imageSearch/', obj)
-  //     .then(res => this.setState({ popupImage: res.data.hits[Math.floor(Math.random() * res.data.hits.length)].webformatURL }))
-  //     .catch(err => console.log('errors', err))
-  // }
   getPopupValue(e) {
     // console.log('popup id', e.target.id)
     this.setState({ cityOnPopup: e.target.id }, this.props.handleChange(e) )
@@ -56,7 +49,7 @@ export default class Map extends React.Component {
 
   render() {
     const { data, lat, lng, bounds } = this.props //lat, lng, bounds for markers only
-    console.log(data)
+    // console.log(data)
     return (
       <div>
         <div className="flex-row centered with-shadow">
@@ -67,7 +60,7 @@ export default class Map extends React.Component {
             onViewportChange={(viewport) => this.setState({ viewport })}
             renderChildrenInPortal={true}
           >
-            {/* <Marker   // MID, SW, NE markers for development purposes only
+            {/* <Marker   // MID, SW, NE markers for development purposes only. Import {Marker} from 'react-map-gl' to use
               latitude={lat}
               longitude={lng}
             >
@@ -98,7 +91,6 @@ export default class Map extends React.Component {
                 latitude={point.route[0].latTo}
                 longitude={point.route[0].lngTo}
                 closeButton={false}
-                // anchor="top"
                 sortByDepth={true}
                 captureClick={true}
               >
