@@ -10,7 +10,7 @@ class Home(View):
 
 class Assets(View):
 
-    def get(self,_request, filename):
+    def get(self, _request, filename):
         path = os.path.join(os.path.dirname(__file__), 'dist', filename)
 
         if os.path.isfile(path):

@@ -71,6 +71,7 @@ export default class FlightSuggestions extends React.Component {
     // console.log(e.currentTarget.id)
     return this.setState({ hourlySuggestionsBarActive: true, hoursOnFilter: e.currentTarget.id }, this.getAllFlightsForDuration(e.currentTarget.id))
   }
+
   getMapBounds() {
     const coordinatesArray = suggestionsByHour.map(point => [point.route[0].lngTo, point.route[0].latTo])
     const longitudes = (coordinatesArray.map(coords => coords[0]))

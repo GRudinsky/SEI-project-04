@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import ReactMapGL, { Popup, FlyToInterpolator } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -32,6 +33,7 @@ export default class Map extends React.Component {
     this.setState({ viewport })
   }
   componentDidMount() {
+    this.scrollToMap()
     this.flyToBoundaries()
   }
   componentDidUpdate(prevProps) {
@@ -46,13 +48,22 @@ export default class Map extends React.Component {
   clearPopupValue() {
     this.setState({ cityOnPopup: null })
   }
+  scrollToMap() {
+    const scrollHeight = this.map.scrollHeight
+    const height = this.map.clientHeight
+    // console.log(height, scrollHeight, window.pageYOffset)
+    window.scrollTo(scrollHeight, height)
+  }
 
   render() {
     const { data, lat, lng, bounds } = this.props //lat, lng, bounds for markers only
     // console.log(data)
     return (
       <div>
-        <div className="flex-row centered with-shadow">
+        <div className="map flex-row centered with-shadow"
+          ref={(div) => {
+            this.map = div
+          }}>
           <ReactMapGL
             mapboxApiAccessToken={process.env.MAPBOX_ACCESS_TOKEN}
             mapStyle="mapbox://styles/mapbox/outdoors-v10"
