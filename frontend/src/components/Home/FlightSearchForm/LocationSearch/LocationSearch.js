@@ -61,9 +61,9 @@ export default class LocationSearch extends React.Component {
       />
           {dropdownActive &&
       <div className="flex-column absolute half-parent-wide cursor-pointer with-shadow">
-        {locationSuggestions && locationSuggestions.locations.map(location => (
+        {locationSuggestions && locationSuggestions.locations.map((location, idx) => (
           <div className="location-suggestion padding-5px"
-            key={locationSuggestions.locations.indexOf(location)}
+            key={idx}
             title={this.props.divTitle}
             id={location.code}
             onClick={setLocation}
