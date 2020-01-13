@@ -80,8 +80,10 @@ Below are the challenges that I have faced while working on this project.
 ### Front-end: engineering the multifunctional album card
 
 One of the challenging parts during this project was implementing the dynamic Map feature that readjusts the map based one different location coordinates displayed on it. 
+
 ![dynamic_map](frontend/src/assets/readme-screenshots/scr_map.gif)
-In order to achieve the above effect, Mapbox needs to be supplied with North_Eastern and South_Western points of the map. Below functions display how it is being achieved. This feature currently works best with the viewport limited to 680 width and 400 height. I am planning to make it responsive to screen changes in the future.
+
+In order to achieve the above effect, Mapbox needs to be supplied with North_Eastern and South_Western points of the map. Below functions display how it is being achieved. 
 
 ```
    getMapBounds() {
