@@ -1,7 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import CurrencySelector from './currencySelector/CurrencySelector'
+import CurrencySelector from './CurrencySelector/CurrencySelector'
 
 const refreshPage = () => window.location.reload(false)
 

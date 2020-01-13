@@ -37,6 +37,7 @@ module.exports = {
       filename: 'index.html',
       inject: 'body'
     }),
-    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN'])
+    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN']),
+    webpack.optimize.ModuleConcatenationPlugin()
   ]
 }

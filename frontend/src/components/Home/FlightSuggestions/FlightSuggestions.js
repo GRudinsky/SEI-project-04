@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import SuggestionsCard from './suggestionsCard/SuggestionsCard'
+import SuggestionsCard from './SuggestionsCard/SuggestionsCard'
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen'
 import Map from './SuggestionsMap/SuggestionsMap'
 import WebMercatorViewport from 'viewport-mercator-project'
