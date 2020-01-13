@@ -1,5 +1,5 @@
 ![ga_logo](https://user-images.githubusercontent.com/38439393/70393846-99b26800-19e6-11ea-82a0-35c1b5738321.png)
-# SEI Project 4: Fin That Flight
+# SEI Project 4: Find That Flight
 
 ## Overview 
 
@@ -42,7 +42,7 @@ $ yarn install
 ```
 Run the app on with the following command:
 ```
-$ yarn start
+$ yarn serve:backend
 ```
 Start your browser and navigate to following address:
 ```
