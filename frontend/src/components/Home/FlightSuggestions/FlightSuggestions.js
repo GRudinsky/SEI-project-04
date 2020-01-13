@@ -134,15 +134,17 @@ export default class FlightSuggestions extends React.Component {
         {this.state.hourlySuggestionsBarActive &&
           <div>
             <h4 className = "bold-font">{cityOnFilter} and other destinations {hoursOnFilter} hours away:</h4>
-            <Map 
-              handleChange={handleChange}
-              searchFromMap={searchFromMap}
-              data = {suggestionsByHour}
-              bounds={getMapBounds()}
-              lng={fitToBounds()[0]}
-              lat={fitToBounds()[1]}
-              zoom={fitToBounds()[2] < 6 ? fitToBounds()[2] - 0.1 : 6} // if one result, setting max-zoom to 6 to avoid over-magnifying, if more results, adding padding by reducing zoom by 0.1
-            />
+            <div className="flex-column centered">
+              <Map 
+                handleChange={handleChange}
+                searchFromMap={searchFromMap}
+                data = {suggestionsByHour}
+                bounds={getMapBounds()}
+                lng={fitToBounds()[0]}
+                lat={fitToBounds()[1]}
+                zoom={fitToBounds()[2] < 6 ? fitToBounds()[2] - 0.1 : 6} // if one result, setting max-zoom to 6 to avoid over-magnifying, if more results, adding padding by reducing zoom by 0.1
+              />
+            </div>
           </div>
         }
       </div>

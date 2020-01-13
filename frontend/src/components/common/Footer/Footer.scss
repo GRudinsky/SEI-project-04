@@ -1,0 +1,13 @@
+@import '../../../styles/style.scss';
+
+.footer {
+  width: 100%;
+  bottom: 0;
+  background-color: $base-blue;
+  margin-top: 2vh;
+
+  a{
+    text-decoration:none;
+    color:black;
+  }
+}

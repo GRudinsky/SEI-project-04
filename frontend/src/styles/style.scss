@@ -40,22 +40,18 @@ html {
   font-weight: 600;
 }
 
-
 .full-height {
   min-height: 100vh;
 }
-.footer {
-  width: 100%;
-  bottom: 0;
-  background-color: $base-blue;
-  margin-top: 2vh;
-}
+
 .logo:hover {
   cursor: pointer;
 }
+
 .image-tile {
   height: 200px;
 }
+
 .without-border {
   border: none;
 }
