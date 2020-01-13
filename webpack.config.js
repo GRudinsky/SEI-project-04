@@ -38,6 +38,6 @@ module.exports = {
       inject: 'body'
     }),
     new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN']),
-    webpack.optimize.ModuleConcatenationPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin()
   ]
 }
