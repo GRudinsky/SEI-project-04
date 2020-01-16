@@ -109,7 +109,6 @@ export default class Home extends React.Component {
   resetDepartureDate() {
     this.setState({ ...this.state.searchData, departureDate: null })
   }
-
   refreshPage() {
     window.location.reload(false)
   } 
@@ -119,6 +118,7 @@ export default class Home extends React.Component {
       .catch(err => console.log(err))
   }
   render() {
+    // console.log(this.state)
     const { loading, loadingMessage, errors, searchData, startDate, endDate, searches, flightResults, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, refreshPage, searchFromMap, suggestionsData } = this
     return (
@@ -139,8 +139,6 @@ export default class Home extends React.Component {
           {flightResults && 
           <SearchResults 
             flightResults = {flightResults}/>}          
-          {/* </div>
-        <div className="flex-column centered"> */}
           {(!flightResults && !loading) &&
           <FlightSuggestions 
             handleChange={handleChange}

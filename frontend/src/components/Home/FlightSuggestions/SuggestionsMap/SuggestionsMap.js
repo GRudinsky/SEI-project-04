@@ -4,12 +4,12 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import './SuggestionsMap.scss'
 
 export default class Map extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       viewport: {
-        width: 800,
-        height: 400,
+        width: props.width,
+        height: props.height,
         latitude: 59,
         longitude: 78,
         zoom: 10,
@@ -40,6 +40,12 @@ export default class Map extends React.Component {
     if (this.props.lng !== prevProps.lng) {
       this.flyToBoundaries()
     }
+    if (this.props.width !== prevProps.width || this.props.width !== prevProps.width ) {
+      const width = this.props.width
+      const height = this.props.height
+      const viewport = { ...this.state.viewport, width, height }
+      this.setState({ viewport })
+    }
   }
   getPopupValue(e) {
     // console.log('popup id', e.target.id)
@@ -59,7 +65,7 @@ export default class Map extends React.Component {
     const { cityOnPopup } = this.state
     const { getPopupValue, clearPopupValue } = this
     const { data, searchFromMap } = this.props //lat, lng, bounds for markers only
-    // console.log(data)
+    // console.log(this.state)
     return (
       <div>
         <div className="map flex-row centered with-shadow"

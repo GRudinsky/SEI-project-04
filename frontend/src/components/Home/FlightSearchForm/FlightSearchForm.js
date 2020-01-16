@@ -1,5 +1,5 @@
 import React from 'react'
-import LocationSearch from './LocationSearch/LocationSearch'
+import LocationSearch from './LocationSearch/LocationSearchHooks'
 import Calendar from './Calendar/Calendar'
 import './FlightSearchForm.scss'
 

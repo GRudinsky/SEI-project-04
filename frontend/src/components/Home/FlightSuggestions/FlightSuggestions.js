@@ -14,15 +14,19 @@ export default class FlightSuggestions extends React.Component {
     this.state = {
       suggestionResults: null,
       loading: true,
-      loadingMessage: 'Loading flight suggestions...'
+      loadingMessage: 'Loading flight suggestions...',
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight
     }
     this.flightDurations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
     this.getMoreSuggestions = this.getMoreSuggestions.bind(this)
     this.fitToBounds = this.fitToBounds.bind(this)
+    this.updateDimensions = this.updateDimensions.bind(this)
   }
 
   componentDidMount() {
     this.getSuggestions()
+    window.addEventListener('resize', this.updateDimensions)
   }
 
   getTime(value) {
@@ -80,10 +84,14 @@ export default class FlightSuggestions extends React.Component {
     const bounds = [sw, ne]
     return bounds
   }
+  updateDimensions () {
+    this.setState({ windowWidth: window.innerWidth, windowHeight: window.innerHeight })
+  }
+  
   fitToBounds() {
     const { longitude, latitude, zoom } = new WebMercatorViewport({ 
-      width: 680,
-      height: 400,
+      width: this.state.windowWidth * 0.7,
+      height: this.state.windowHeight * 0.7,
       latitude: 50,
       longitude: 10,
       zoom: 1.89,
@@ -100,9 +108,10 @@ export default class FlightSuggestions extends React.Component {
   }
   render() {
     // suggestionsByHour[0] && console.log('suggestions', suggestionsByHour, this.fitToBounds())
-    const { loading, loadingMessage, errors, suggestionResults, cityOnFilter, hoursOnFilter  } = this.state
+    const { loading, loadingMessage, errors, suggestionResults, cityOnFilter, hoursOnFilter, windowWidth, windowHeight  } = this.state
     const { getMoreSuggestions, fitToBounds, getMapBounds } = this
     const { handleChange, searchFromMap } = this.props
+    // console.log(this.state)
     return (
       <div className="container">
         <div>
@@ -139,6 +148,8 @@ export default class FlightSuggestions extends React.Component {
                 handleChange={handleChange}
                 searchFromMap={searchFromMap}
                 data = {suggestionsByHour}
+                width = {windowWidth * 0.8}
+                height = {windowHeight * 0.8}
                 bounds={getMapBounds()}
                 lng={fitToBounds()[0]}
                 lat={fitToBounds()[1]}

@@ -1,5 +1,5 @@
 //loading spinner
-.loader {
+.spinning-loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
   border-top: 16px solid #020303;
@@ -7,6 +7,9 @@
   height: 60px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
+  .spin-object{
+    transform: rotate(0.5turn) translate(-16px -10%)
+  }
 }
 
 /* Safari */
@@ -18,4 +21,29 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes bouncing-loader {
+  to {
+    opacity: 0.1;
+    transform: translate3d(0, -1vmin, 0);
+  }
+}
+.bouncing-loader {
+  display: flex;
+  justify-content: center;
+}
+.bouncing-loader > div {
+  width: 3vmin;
+  height: 3vmin;
+  margin: 1vmin 0.4vmin;
+  background: #8385aa;
+  border-radius: 100%;
+  animation: bouncing-loader 0.6s infinite alternate;
+}
+.bouncing-loader > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.bouncing-loader > div:nth-child(3) {
+  animation-delay: 0.4s;
 }
