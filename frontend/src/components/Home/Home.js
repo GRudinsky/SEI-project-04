@@ -16,7 +16,15 @@ export default class Home extends React.Component {
       searchData: {
         user: 'undefined',
         currency: 'EUR',
-        origin: 'LON'
+        origin: '',
+        destination: '',
+        departureDate: '',
+        returnDate: ''
+      },
+      errors: {
+        origin: null,
+        destination: null,
+        departure_date: null
       },
       departureCalendarActive: false,
       returnCalendarActive: false,
@@ -67,10 +75,9 @@ export default class Home extends React.Component {
     this.setState({ flightResults: null, loading: true }, this.getFlightResults())
   }
   getFlightResults() {
-    // console.log('submitting', this.state.searchData)
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
       .then(res => this.setState({ flightResults: res.data, loading: false }), this.pushSearchtoDB())
-      .catch(err => this.setState({ errors: err.message, loadingMessage: 'Ooops, something went wrong...' }))
+      .catch(err => this.setState({ errors: err.response.data, loadingMessage: 'Ooops, something went wrong...' }))
   }
   pushSearchtoDB(){
     axios.post('/api/searches', this.state.searchData)
@@ -118,8 +125,8 @@ export default class Home extends React.Component {
       .catch(err => console.log(err))
   }
   render() {
-    // console.log(this.state)
-    const { loading, loadingMessage, errors, searchData, startDate, endDate, searches, flightResults, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
+    console.log(this.state.errors)
+    const { loading, loadingMessage, errors,loadingErrors, searchData, startDate, endDate, searches, flightResults, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, refreshPage, searchFromMap, suggestionsData } = this
     return (
       <section className="home flex-column space-between">
@@ -130,10 +137,10 @@ export default class Home extends React.Component {
           refreshPage = {refreshPage}
         />
         <FlightSearchForm 
-          {...{ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }}
+          {...{ searchData, errors, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar }}
         />
         <div className="content flex-column centered full-parent-high">
-          {(loading || errors) && 
+          {(loading || loadingErrors) && 
           <LoadingScreen 
             message = {loadingMessage}/>}
           {flightResults && 

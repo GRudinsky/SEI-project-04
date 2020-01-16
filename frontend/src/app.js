@@ -5,7 +5,7 @@ import './styles/Skeleton-2.0.4/css/normalize.css'
 import './styles/Skeleton-2.0.4/css/skeleton.css'
 import './styles/style.scss'
 import Home from './components/Home/Home'
-// import Register from './components/auth/Register/Register'
+import Register from './components/auth/Register/Register'
 import Footer from './components/common/Footer/Footer'
 
 const App = () => (
@@ -13,7 +13,7 @@ const App = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={Home} />
-      {/* <Route path="/register" component={Register} /> */}
+      <Route path="/register" component={Register} />
     </Switch>
   </BrowserRouter>
   <Footer />

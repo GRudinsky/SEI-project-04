@@ -3,7 +3,7 @@ import LocationSearch from './LocationSearch/LocationSearchHooks'
 import Calendar from './Calendar/Calendar'
 import './FlightSearchForm.scss'
 
-const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
+const FlightSearchForm = ({ searchData, errors, startDate, endDate, departureCalendarActive, returnCalendarActive, returnDateLimit, handleSubmit, handleChange, handleDateChange, toggleDepartureCalendar, toggleReturnCalendar, closeOnBlur }) => {
   return (
     <div className="search-bar with-shadow quarter-screen-high flex-column centered margin-bottom-1v" >
       <form className="container" value="form" onSubmit={handleSubmit} >
@@ -13,6 +13,7 @@ const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarAct
               handleChange={handleChange}
               closeOnBlur={closeOnBlur}
               divTitle="origin"
+              validationError={errors.origin}
             />
           </div>
           <div className="quarter-parent-wide">
@@ -20,6 +21,7 @@ const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarAct
               handleChange={handleChange}
               closeOnBlur={closeOnBlur}
               divTitle="destination"
+              validationError={errors.destination}
             />
           </div>
           <div className="quarter-parent-wide">
@@ -32,6 +34,7 @@ const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarAct
             >
               <p className="input-text base-color">{searchData.departureDate ? searchData.departureDate : 'Date From'}</p>
             </div>
+            {errors.departure_date && <p className="small-text danger">{errors.departure_date}</p>}
             {departureCalendarActive &&
                 <Calendar
                   {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeOnBlur }}
@@ -55,6 +58,7 @@ const FlightSearchForm = ({ searchData, startDate, endDate, departureCalendarAct
                   disableDates={date => date < returnDateLimit}
                   startDate={endDate}
                   divTitle="returnCalendar"
+                  validationError={errors.departure_date}
                 />}
           </div>
         </div>

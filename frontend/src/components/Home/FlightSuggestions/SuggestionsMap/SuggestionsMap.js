@@ -25,12 +25,14 @@ export default class Map extends React.Component {
     const viewport = { 
       ...this.state.viewport, 
       longitude: this.props.lng, 
+      height: this.props.height,
+      width: this.props.width,
       latitude: this.props.lat, 
       zoom: this.props.zoom,
       transitionDuration: 1000,
       transitionInterpolator: new FlyToInterpolator()
     }
-    this.setState({ viewport })
+    this.setState({ viewport }, console.log(this.state.viewport))
   }
   componentDidMount() {
     this.scrollToMap()
@@ -39,12 +41,6 @@ export default class Map extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.lng !== prevProps.lng) {
       this.flyToBoundaries()
-    }
-    if (this.props.width !== prevProps.width || this.props.width !== prevProps.width ) {
-      const width = this.props.width
-      const height = this.props.height
-      const viewport = { ...this.state.viewport, width, height }
-      this.setState({ viewport })
     }
   }
   getPopupValue(e) {

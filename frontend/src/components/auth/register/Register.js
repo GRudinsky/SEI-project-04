@@ -31,7 +31,7 @@ export default class Register extends React.Component {
     axios.post('/api/register', this.state.data)
       .then(res => this.setState({ loading: true, loadingMessage: res.data.message }))
       .then(() => this.takeToPage('/'))
-      .catch(err => this.setState({ errors: err.response.data }))
+      .catch(err => this.setState({ loadingErrors: err.response.data }))
   }
 
   handleChange(e) {

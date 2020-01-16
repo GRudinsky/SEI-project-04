@@ -76,11 +76,11 @@ class SearchListView(APIView):
             request.data['user'] = request.user.id # adding the id of user that performed the search
         else:
             request.data['user'] = 1 # if search was done without registration, dummy user is attached to search
-        search = SearchSerializer(data=request.data) # we pass the data we have been send with the request(the json body of the POST request to '/posts', which should contain a valid object with all the correct fields)
-        if search.is_valid(): # we can then use this in built is valid function, to see if your request data was right, and included everything it needed to
-            search.save() # If is valid comes back as true, we save the post. This creates it in the database
-            return Response(search.data, status=HTTP_201_CREATED) # we then send back the newly created post in the response to client, the data object of the post is the JSON data
-        return Response(search.errors, status=HTTP_422_UNPROCESSABLE_ENTITY)
+        serializer = SearchSerializer(data=request.data) # we pass the data we have been send with the request(the json body of the POST request to '/posts', which should contain a valid object with all the correct fields)
+        if serializer.is_valid(): # we can then use this in built is valid function, to see if your request data was right, and included everything it needed to
+            serializer.save() # If is valid comes back as true, we save the post. This creates it in the database
+            return Response(serializer.data, status=HTTP_201_CREATED) # we then send back the newly created post in the response to client, the data object of the post is the JSON data
+        return Response(serializer.errors, status=HTTP_422_UNPROCESSABLE_ENTITY)
 
 class SearchDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Search.objects.all()

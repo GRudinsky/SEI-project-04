@@ -21,6 +21,7 @@ export default class SuggestionsCard extends React.Component {
   componentDidMount() {
     this.getImage(this.props.cityTo)
   }
+  
   getTime(value) {
     const time = new Date(value * 1000)
     return `${time.getHours() - 1}h ${time.getMinutes()}mins`

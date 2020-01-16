@@ -44,6 +44,7 @@ export default function LocationSearch (props) {
         onBlur={props.closeOnBlur}
         autoComplete="off"
       />
+      {props.validationError && <p className="small-text danger">{props.validationError}</p>}
           {dropdownActive &&
       <div className="flex-column absolute half-parent-wide cursor-pointer with-shadow">
         {locationSuggestions && locationSuggestions.locations.map((location, idx) => (
