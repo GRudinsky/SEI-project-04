@@ -22,9 +22,9 @@ export default class Home extends React.Component {
         returnDate: ''
       },
       errors: {
-        origin: null,
-        destination: null,
-        departure_date: null
+        // origin: null,
+        // destination: null,
+        // departure_date: null
       },
       departureCalendarActive: false,
       returnCalendarActive: false,
@@ -51,7 +51,7 @@ export default class Home extends React.Component {
  
   handleChange(e) {
     const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
-    this.setState({ searchData }, this.setStorage(e))
+    this.setState({ searchData  }, this.setStorage(e))
   }
   setStorage(e) {
     return e.target.name ? localStorage.setItem(e.target.name, e.target.value) : localStorage.setItem(e.target.title, e.target.id)

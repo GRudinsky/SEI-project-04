@@ -27,9 +27,6 @@ export default class FlightSuggestions extends React.Component {
     this.getSuggestions()
     window.addEventListener('resize', this.updateDimensions)
   }
-  componentWillUnmount() {
-    window.removeEventListener('resize')
-  }
 
   getTime(value) {
     const time = new Date(value * 1000)
@@ -127,9 +124,9 @@ export default class FlightSuggestions extends React.Component {
         <h4 className="bold-font">{this.getSuggestionsText()}</h4>
         <div className="flex-row space-between with-scroll">
           {suggestionsByDurations.filter(flight => flight !== undefined)
-            .map(flight => (
+            .map((flight, idx) => (
               <SuggestionsCard 
-                key={flight.id}
+                key={idx}
                 price={flight.price}
                 duration={flight.duration.total}
                 conversion={flight.conversion}
@@ -144,7 +141,7 @@ export default class FlightSuggestions extends React.Component {
 
         {this.state.hourlySuggestionsBarActive &&
           <div>
-            <h4 className = "bold-font">{cityOnFilter} and other destinations {hoursOnFilter} hours away:</h4>
+            <h4 className="bold-font">{cityOnFilter} and other destinations {hoursOnFilter} {hoursOnFilter == 1 ? 'hour' : 'hours'} away:</h4>
             <div className="flex-column centered">
               <Map 
                 handleChange={handleChange}
