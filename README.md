@@ -99,7 +99,7 @@ In order to achieve the above effect, Mapbox needs to be supplied with North_Eas
   fitToBounds() {
     const { longitude, latitude, zoom } = new WebMercatorViewport({ 
       width: this.state.windowWidth * 0.7,
-      height: this.state.windowHeight * 0.7,
+      height: this.state.windowWidth / 2 * 0.7,
       latitude: 50,
       longitude: 10,
       zoom: 1.89,

@@ -24,15 +24,15 @@ export default class Map extends React.Component {
   flyToBoundaries() {
     const viewport = { 
       ...this.state.viewport, 
-      longitude: this.props.lng, 
-      height: this.props.height,
       width: this.props.width,
+      height: this.props.height,
+      longitude: this.props.lng, 
       latitude: this.props.lat, 
       zoom: this.props.zoom,
       transitionDuration: 1000,
       transitionInterpolator: new FlyToInterpolator()
     }
-    this.setState({ viewport }, console.log(this.state.viewport))
+    this.setState({ viewport })
   }
   componentDidMount() {
     this.scrollToMap()
@@ -53,7 +53,6 @@ export default class Map extends React.Component {
   scrollToMap() {
     const scrollHeight = this.map.scrollHeight
     const height = this.map.clientHeight
-    // console.log(height, scrollHeight, window.pageYOffset)
     window.scrollTo(scrollHeight, height)
   }
 
@@ -61,7 +60,6 @@ export default class Map extends React.Component {
     const { cityOnPopup } = this.state
     const { getPopupValue, clearPopupValue } = this
     const { data, searchFromMap } = this.props //lat, lng, bounds for markers only
-    // console.log(this.state)
     return (
       <div>
         <div className="map flex-row centered with-shadow"

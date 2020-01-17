@@ -148,6 +148,10 @@ html {
 .auto-wide {
   width: auto;
 }
+.fifth-screen-wide{
+  min-width: 20vw;
+  max-width: 20vw;
+}
 .thirty-wide {
   width: 30vw;
 }
@@ -159,6 +163,7 @@ html {
 }
 .quarter-parent-wide {
    min-width: 25%;
+   max-width: 25%;
 }
 .thirty-percent-wide {
   min-width: 31%;
