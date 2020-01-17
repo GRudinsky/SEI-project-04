@@ -77,7 +77,7 @@ export default class Home extends React.Component {
   getFlightResults() {
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
       .then(res => this.setState({ flightResults: res.data, loading: false }), this.pushSearchtoDB())
-      .catch(err => this.setState({ errors: err.response.data, loadingMessage: 'Ooops, something went wrong...' }))
+      .catch(err => this.setState({ errors: err.response.data, loading: false }))
   }
   pushSearchtoDB(){
     axios.post('/api/searches', this.state.searchData)

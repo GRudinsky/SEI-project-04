@@ -40,8 +40,9 @@ Install the packages listed in the package.json file by running the following te
 ```
 $ yarn install
 ```
-Run the app on with the following command:
+Run the app on your machine with the following commands:
 ```
+$ yarn build
 $ yarn serve:backend
 ```
 Start your browser and navigate to following address:
@@ -97,8 +98,8 @@ In order to achieve the above effect, Mapbox needs to be supplied with North_Eas
   }
   fitToBounds() {
     const { longitude, latitude, zoom } = new WebMercatorViewport({ 
-      width: 680,
-      height: 400,
+      width: this.state.windowWidth * 0.7,
+      height: this.state.windowHeight * 0.7,
       latitude: 50,
       longitude: 10,
       zoom: 1.89,

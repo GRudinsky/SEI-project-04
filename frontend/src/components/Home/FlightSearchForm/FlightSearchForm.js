@@ -1,5 +1,6 @@
 import React from 'react'
 import LocationSearch from './LocationSearch/LocationSearchHooks'
+import ValidationError from '../../common/ValidationError/ValidationError'
 import Calendar from './Calendar/Calendar'
 import './FlightSearchForm.scss'
 
@@ -13,7 +14,7 @@ const FlightSearchForm = ({ searchData, errors, startDate, endDate, departureCal
               handleChange={handleChange}
               closeOnBlur={closeOnBlur}
               divTitle="origin"
-              validationError={errors.origin}
+              validationCondition={errors.origin}
             />
           </div>
           <div className="quarter-parent-wide">
@@ -21,20 +22,20 @@ const FlightSearchForm = ({ searchData, errors, startDate, endDate, departureCal
               handleChange={handleChange}
               closeOnBlur={closeOnBlur}
               divTitle="destination"
-              validationError={errors.destination}
+              validationCondition={errors.destination}
             />
           </div>
-          <div className="quarter-parent-wide">
+          <div className="twenty-percent-wide">
             <div 
               title="departureDate" 
-              className="card full-parent-wide"
+              className="date-input full-parent-wide"
               id={searchData.departureDate} 
               onChange={handleChange}
               onClick={toggleDepartureCalendar} 
             >
               <p className="input-text base-color">{searchData.departureDate ? searchData.departureDate : 'Date From'}</p>
             </div>
-            {errors.departure_date && <p className="small-text danger">{errors.departure_date}</p>}
+            <ValidationError validationCondition={errors.departure_date}/>
             {departureCalendarActive &&
                 <Calendar
                   {...{ handleDateChange, startDate, endDate, departureCalendarActive, returnCalendarActive, closeOnBlur }}
@@ -42,29 +43,30 @@ const FlightSearchForm = ({ searchData, errors, startDate, endDate, departureCal
                   disableDates={date => date < new Date() - 86400000}
                 />}
           </div>
-          <div className="quarter-parent-wide">
+          <div className="twenty-percent-wide">
             <div
               title="returntureDate"
-              className="card without-margin full-parent-wide"
+              className="date-input full-parent-wide"
               id={searchData.returnDate}
               onChange={handleChange}
               onClick={toggleReturnCalendar}
             >
               <p className="input-text base-color">{searchData.returnDate ? searchData.returnDate : 'Date To'}</p>
             </div>
+            <ValidationError validationCondition={errors.return_date} />
             {returnCalendarActive &&
                 <Calendar
                   {...{ handleDateChange, departureCalendarActive, returnCalendarActive, closeOnBlur }}
                   disableDates={date => date < returnDateLimit}
                   startDate={endDate}
                   divTitle="returnCalendar"
-                  validationError={errors.departure_date}
                 />}
           </div>
-        </div>
-        <div className="button button-primary" onClick={handleSubmit}>
+          <div className="button button-primary" onClick={handleSubmit}>
             Submit
+          </div>
         </div>
+       
       </form>
     </div>
   )

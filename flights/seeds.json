@@ -812,5 +812,203 @@
     "returnDate": "24/1/2020",
     "user": 1
   }
+},
+{
+  "model": "flights.search",
+  "pk": 75,
+  "fields": {
+    "origin": "LON",
+    "destination": "ROM",
+    "departureDate": "24/1/2020",
+    "returnDate": "24/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 76,
+  "fields": {
+    "origin": "LON",
+    "destination": "VCE",
+    "departureDate": "24/1/2020",
+    "returnDate": "24/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 77,
+  "fields": {
+    "origin": "LGW",
+    "destination": "BER",
+    "departureDate": "24/1/2020",
+    "returnDate": "24/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 78,
+  "fields": {
+    "origin": "LGW",
+    "destination": "KRK",
+    "departureDate": "23/1/2020",
+    "returnDate": "23/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 79,
+  "fields": {
+    "origin": "BER",
+    "destination": "LON",
+    "departureDate": "18/1/2020",
+    "returnDate": "18/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 80,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "24/1/2020",
+    "returnDate": "24/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 81,
+  "fields": {
+    "origin": "LGW",
+    "destination": "BER",
+    "departureDate": "17/1/2020",
+    "returnDate": "17/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 82,
+  "fields": {
+    "origin": "BER",
+    "destination": "KUN",
+    "departureDate": "17/1/2020",
+    "returnDate": "17/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 83,
+  "fields": {
+    "origin": "VNO",
+    "destination": "LON",
+    "departureDate": "17/1/2020",
+    "returnDate": "17/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 84,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "25/1/2020",
+    "returnDate": "25/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 85,
+  "fields": {
+    "origin": "KUN",
+    "destination": "BER",
+    "departureDate": "24/1/2020",
+    "returnDate": "24/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 86,
+  "fields": {
+    "origin": "KUN",
+    "destination": "BER",
+    "departureDate": "16/1/2020",
+    "returnDate": "16/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 87,
+  "fields": {
+    "origin": "KUN",
+    "destination": "BER",
+    "departureDate": "17/1/2020",
+    "returnDate": "17/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 88,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "18/1/2020",
+    "returnDate": "18/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 89,
+  "fields": {
+    "origin": "LON",
+    "destination": "SXF",
+    "departureDate": "24/1/2020",
+    "returnDate": "24/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 90,
+  "fields": {
+    "origin": "LON",
+    "destination": "BGO",
+    "departureDate": "25/1/2020",
+    "returnDate": "25/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 91,
+  "fields": {
+    "origin": "LON",
+    "destination": "IST",
+    "departureDate": "25/1/2020",
+    "returnDate": "25/1/2020",
+    "user": 1
+  }
+},
+{
+  "model": "flights.search",
+  "pk": 92,
+  "fields": {
+    "origin": "LON",
+    "destination": "BER",
+    "departureDate": "18/1/2020",
+    "returnDate": "18/1/2020",
+    "user": 1
+  }
 }
 ]

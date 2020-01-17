@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import ValidationError from '../../../common/ValidationError/ValidationError'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCity, faPlaneDeparture, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons'
 
@@ -44,7 +45,7 @@ export default function LocationSearch (props) {
         onBlur={props.closeOnBlur}
         autoComplete="off"
       />
-      {props.validationError && <p className="small-text danger">{props.validationError}</p>}
+      <ValidationError validationCondition={props.validationCondition}/>
           {dropdownActive &&
       <div className="flex-column absolute half-parent-wide cursor-pointer with-shadow">
         {locationSuggestions && locationSuggestions.locations.map((location, idx) => (
