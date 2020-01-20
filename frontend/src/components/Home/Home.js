@@ -51,7 +51,7 @@ export default class Home extends React.Component {
  
   handleChange(e) {
     const searchData = e.target.name ? { ...this.state.searchData, [e.target.name]: e.target.value } : { ...this.state.searchData, [e.target.title]: e.target.id }
-    this.setState({ searchData  }, this.setStorage(e))
+    this.setState({ searchData }, this.setStorage(e))
   }
   setStorage(e) {
     return e.target.name ? localStorage.setItem(e.target.name, e.target.value) : localStorage.setItem(e.target.title, e.target.id)
@@ -72,7 +72,17 @@ export default class Home extends React.Component {
     this.setState({ searchData }, this.handleSubmit())
   }
   handleSubmit() {
-    this.setState({ flightResults: null, loading: true }, this.getFlightResults())
+    this.setState({ flightResults: null, loading: true }, this.getFlightResults(), this.resetErrors())
+  }
+  resetErrors() {
+    const { searchData, errors } = this.state
+    const err = { ...errors,
+      origin: searchData.origin !== '' ? null : errors.origin,
+      destination: searchData.destination !== '' ? null : errors.destination,
+      departure_date: searchData.departureDate !== '' ? null : errors.departure_date
+    }
+    console.log('errors', err)
+    this.setState({ errors: err })
   }
   getFlightResults() {
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
@@ -125,7 +135,7 @@ export default class Home extends React.Component {
       .catch(err => console.log(err))
   }
   render() {
-    console.log(this.state.errors)
+    console.log(this.state)
     const { loading, loadingMessage, errors,loadingErrors, searchData, startDate, endDate, searches, flightResults, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, refreshPage, searchFromMap, suggestionsData } = this
     return (
