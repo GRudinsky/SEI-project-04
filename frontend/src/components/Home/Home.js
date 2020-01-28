@@ -72,7 +72,7 @@ export default class Home extends React.Component {
     this.setState({ searchData }, this.handleSubmit())
   }
   handleSubmit() {
-    this.setState({ flightResults: null, loading: true }, this.getFlightResults(), this.resetErrors())
+    this.setState({ flightResults: null, loading: true }, this.resetErrors())
   }
   resetErrors() {
     const { searchData, errors } = this.state
@@ -81,8 +81,7 @@ export default class Home extends React.Component {
       destination: searchData.destination !== '' ? null : errors.destination,
       departure_date: searchData.departureDate !== '' ? null : errors.departure_date
     }
-    console.log('errors', err)
-    this.setState({ errors: err })
+    this.setState({ errors: err }, this.getFlightResults())
   }
   getFlightResults() {
     axios.post('/api/proxy/flightSearch/', this.state.searchData)
@@ -135,7 +134,6 @@ export default class Home extends React.Component {
       .catch(err => console.log(err))
   }
   render() {
-    console.log(this.state)
     const { loading, loadingMessage, errors,loadingErrors, searchData, startDate, endDate, searches, flightResults, departureCalendarActive, returnDateLimit, returnCalendarActive } = this.state
     const { handleChange, handleDateChange, handleSubmit, toggleDepartureCalendar, toggleReturnCalendar, refreshPage, searchFromMap, suggestionsData } = this
     return (
