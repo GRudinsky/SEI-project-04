@@ -1,11 +1,11 @@
 import React from 'react'
 
-const CurrencySelector = ({ handleChange, currency }) => (
+const CurrencySelector = (props ) => (
   <form className="flex-row without-margin">
     <select className="without-border" 
       name="currency"
-      value = {currency}
-      onChange={handleChange} 
+      value = {props.currency}
+      onChange={props._onChange} 
     >
       <option value="" disabled>Currency</option>
       <option value="EUR">EUR - €</option>
